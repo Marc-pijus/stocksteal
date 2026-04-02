@@ -131,7 +131,7 @@ export async function GET(request: Request) {
 
   try {
     const response = await fetch(
-      'https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T&dateRange=custom&startdt=2025-01-01&enddt=2025-12-31&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=40',
+      'https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T&dateRange=custom&startdt=2025-01-01&enddt=2025-12-31&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=5',
       {
         headers: {
           'User-Agent': 'StockSteal contact@stocksteal.com',
@@ -179,7 +179,7 @@ export async function GET(request: Request) {
       const result = await analyzeAndSave(filing)
       results.push({ filing: filing.companies[0], ...result })
 
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      
     }
 
     return NextResponse.json({
