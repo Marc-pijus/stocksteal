@@ -1,33 +1,60 @@
 import { TenderOfferCard } from '@/components/TenderOfferCard'
+import { supabase } from '@/lib/supabase'
 
 async function getFilings() {
-  const response = await fetch(
-    'https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T&dateRange=custom&startdt=2025-01-01&enddt=2025-12-31&_source=file_date,display_names,adsh,form,root_forms,biz_locations,sics&from=0&size=20',
-    {
-      headers: {
-        'User-Agent': 'StockSteal contact@stocksteal.com',
-        'Accept': 'application/json',
-      },
-      next: { revalidate: 300 }
-    }
-  )
+  const { data: filings, error } = await supabase
+    .from('filings')
+    .select(`
+      *,
+      analyses (
+        analysis,
+        has_document,
+        ticker,
+        market_price,
+        premium_percent,
+        updated_at
+      )
+    `)
+    .order('file_date', { ascending: false })
+    .limit(30)
 
-  const data = await response.json()
-
-  return data.hits.hits
-    .filter((hit: any) =>
-      hit._source.form === 'SC TO-I' ||
-      hit._source.form === 'SC TO-T'
+  if (error || !filings || filings.length === 0) {
+    const response = await fetch(
+      'https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T&dateRange=custom&startdt=2025-01-01&enddt=2025-12-31&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=20',
+      {
+        headers: {
+          'User-Agent': 'StockSteal contact@stocksteal.com',
+          'Accept': 'application/json',
+        },
+        next: { revalidate: 300 }
+      }
     )
-    .map((hit: any) => ({
-      id: hit._id,
-      adsh: hit._source.adsh,
-      form: hit._source.form,
-      fileDate: hit._source.file_date,
-      companies: hit._source.display_names,
-      location: hit._source.biz_locations?.[0] || 'N/A',
-      edgarUrl: `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=${hit._source.form}`
-    }))
+    const data = await response.json()
+    return data.hits.hits
+      .filter((hit: any) =>
+        hit._source.form === 'SC TO-I' ||
+        hit._source.form === 'SC TO-T'
+      )
+      .map((hit: any) => ({
+        id: hit._id,
+        adsh: hit._source.adsh,
+        form: hit._source.form,
+        fileDate: hit._source.file_date,
+        companies: hit._source.display_names,
+        location: hit._source.biz_locations?.[0] || 'N/A',
+        analysis: null,
+      }))
+  }
+
+  return filings.map((f: any) => ({
+    id: f.id,
+    adsh: f.adsh,
+    form: f.form,
+    fileDate: f.file_date,
+    companies: f.companies,
+    location: f.location,
+    analysis: f.analyses?.[0] || null,
+  }))
 }
 
 export default async function Home() {
