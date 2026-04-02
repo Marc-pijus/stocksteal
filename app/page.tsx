@@ -1,11 +1,33 @@
 import { TenderOfferCard } from '@/components/TenderOfferCard'
 
 async function getFilings() {
-  const res = await fetch('http://localhost:3000/api/edgar', {
-    cache: 'no-store'
-  })
-  const data = await res.json()
-  return data.filings || []
+  const response = await fetch(
+    'https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T&dateRange=custom&startdt=2025-01-01&enddt=2025-12-31&_source=file_date,display_names,adsh,form,root_forms,biz_locations,sics&from=0&size=20',
+    {
+      headers: {
+        'User-Agent': 'StockSteal contact@stocksteal.com',
+        'Accept': 'application/json',
+      },
+      next: { revalidate: 300 }
+    }
+  )
+
+  const data = await response.json()
+
+  return data.hits.hits
+    .filter((hit: any) =>
+      hit._source.form === 'SC TO-I' ||
+      hit._source.form === 'SC TO-T'
+    )
+    .map((hit: any) => ({
+      id: hit._id,
+      adsh: hit._source.adsh,
+      form: hit._source.form,
+      fileDate: hit._source.file_date,
+      companies: hit._source.display_names,
+      location: hit._source.biz_locations?.[0] || 'N/A',
+      edgarUrl: `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=${hit._source.form}`
+    }))
 }
 
 export default async function Home() {
@@ -13,7 +35,6 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
@@ -26,14 +47,12 @@ export default async function Home() {
         </div>
       </header>
 
-      {/* Content */}
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="mb-6">
           <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
             Latest Tender Offers — SEC EDGAR
           </h2>
         </div>
-
         <div className="grid gap-4">
           {filings.map((filing: any) => (
             <TenderOfferCard key={filing.id} filing={filing} />
