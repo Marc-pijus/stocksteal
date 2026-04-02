@@ -46,7 +46,12 @@ async function getFilings() {
       }))
   }
 
-  return filings.map((f: any) => ({
+  return filings
+  .filter((f: any) => {
+    const hasTicker = f.companies.some((c: string) => /\([A-Z]{2,5}\)/.test(c))
+    return hasTicker
+  })
+  .map((f: any) => ({
     id: f.id,
     adsh: f.adsh,
     form: f.form,

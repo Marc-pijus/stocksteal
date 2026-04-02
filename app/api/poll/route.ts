@@ -161,7 +161,11 @@ export async function GET(request: Request) {
       .select('id')
 
     const existingIds = new Set(existingFilings?.map((f: any) => f.id) || [])
-    const newFilings = filings.filter((f: any) => !existingIds.has(f.id))
+    const newFilings = filings.filter((f: any) => {
+  if (existingIds.has(f.id)) return false
+  const hasTicker = f.companies.some((c: string) => /\([A-Z]{2,5}\)/.test(c))
+  return hasTicker
+})
 
     console.log(`Found ${newFilings.length} new filings`)
 
