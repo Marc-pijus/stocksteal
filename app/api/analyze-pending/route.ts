@@ -55,17 +55,24 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { data: filings } = await supabaseAdmin
-    .from('filings')
-    .select('*, analyses(id)')
-    .is('analyses.id', null)
-    .limit(1)
+  const { data: analyzedIds } = await supabaseAdmin
+    .from('analyses')
+    .select('filing_id')
 
-  if (!filings || filings.length === 0) {
+  const analyzed = new Set(analyzedIds?.map((a: any) => a.filing_id) || [])
+
+  const { data: allFilings } = await supabaseAdmin
+    .from('filings')
+    .select('*')
+    .order('file_date', { ascending: false })
+
+  const pending = (allFilings || []).filter((f: any) => !analyzed.has(f.id))
+
+  if (pending.length === 0) {
     return NextResponse.json({ message: 'No pending filings to analyze' })
   }
 
-  const filing = filings[0]
+  const filing = pending[0]
   const ticker = filing.companies[0].match(/\(([A-Z]{2,5})\)/)?.[1] || null
   const cikMatch = filing.companies[0].match(/CIK (\d+)/)
   const cik = cikMatch ? cikMatch[1].replace(/^0+/, '') : null
@@ -125,6 +132,7 @@ Cover: what this means, opportunity assessment, key risks, what to watch. Max 20
     processed: filing.companies[0],
     ticker,
     hasDocument,
-    marketPrice: stockPrice?.price
+    marketPrice: stockPrice?.price,
+    pending: pending.length - 1
   })
 }
