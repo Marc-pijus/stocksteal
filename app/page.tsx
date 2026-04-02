@@ -16,7 +16,7 @@ async function getFilings() {
       )
     `)
     .order('file_date', { ascending: false })
-    .limit(30)
+    .limit(50)
 
   if (error || !filings || filings.length === 0) {
     const response = await fetch(
@@ -32,8 +32,8 @@ async function getFilings() {
     const data = await response.json()
     return data.hits.hits
       .filter((hit: any) =>
-        hit._source.form === 'SC TO-I' ||
-        hit._source.form === 'SC TO-T'
+        (hit._source.form === 'SC TO-I' || hit._source.form === 'SC TO-T') &&
+        hit._source.display_names.some((c: string) => /\([A-Z]{2,5}\)/.test(c))
       )
       .map((hit: any) => ({
         id: hit._id,
@@ -47,19 +47,18 @@ async function getFilings() {
   }
 
   return filings
-  .filter((f: any) => {
-    const hasTicker = f.companies.some((c: string) => /\([A-Z]{2,5}\)/.test(c))
-    return hasTicker
-  })
-  .map((f: any) => ({
-    id: f.id,
-    adsh: f.adsh,
-    form: f.form,
-    fileDate: f.file_date,
-    companies: f.companies,
-    location: f.location,
-    analysis: f.analyses?.[0] || null,
-  }))
+    .filter((f: any) =>
+      f.companies.some((c: string) => /\([A-Z]{2,5}\)/.test(c))
+    )
+    .map((f: any) => ({
+      id: f.id,
+      adsh: f.adsh,
+      form: f.form,
+      fileDate: f.file_date,
+      companies: f.companies,
+      location: f.location,
+      analysis: f.analyses?.[0] || null,
+    }))
 }
 
 export default async function Home() {
