@@ -6,7 +6,7 @@ async function getFilings() {
     .from('filings')
     .select(`
       *,
-      analyses (
+      analyses!analyses_filing_id_fkey (
         analysis,
         has_document,
         ticker,
