@@ -11,12 +11,14 @@ async function getFilings() {
         has_document,
         ticker,
         market_price,
-        premium_percent,
         updated_at
       )
     `)
     .order('file_date', { ascending: false })
     .limit(50)
+
+  console.log('Filings from Supabase:', JSON.stringify(filings?.slice(0,2), null, 2))
+  console.log('Error:', error)
 
   if (error || !filings || filings.length === 0) {
     const response = await fetch(
