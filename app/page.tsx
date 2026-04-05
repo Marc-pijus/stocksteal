@@ -1,6 +1,8 @@
 import { TenderOfferCard } from '@/components/TenderOfferCard'
 import { supabase } from '@/lib/supabase'
 
+export const dynamic = 'force-dynamic'
+
 async function getFilings() {
   const { data: filings, error } = await supabase
     .from('filings')
@@ -17,17 +19,21 @@ async function getFilings() {
     .order('file_date', { ascending: false })
     .limit(50)
 
-  
-
   if (error || !filings || filings.length === 0) {
+    const today = new Date()
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(today.getDate() - 30)
+    const startdt = thirtyDaysAgo.toISOString().split('T')[0]
+    const enddt = today.toISOString().split('T')[0]
+
     const response = await fetch(
-      'https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T&dateRange=custom&startdt=2025-01-01&enddt=2025-12-31&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=20',
+      `https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T&dateRange=custom&startdt=${startdt}&enddt=${enddt}&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=20`,
       {
         headers: {
           'User-Agent': 'StockSteal contact@stocksteal.com',
           'Accept': 'application/json',
         },
-        next: { revalidate: 300 }
+        cache: 'no-store'
       }
     )
     const data = await response.json()
