@@ -314,48 +314,37 @@ export default function LandingPage() {
       </section>
 
       {/* PRICING */}
-      <section id="pricing" style={{ padding: '56px 40px', borderBottom: '1px solid #e0ddd4' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div className="section-label" style={{ marginBottom: 40 }}>Pricing</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, maxWidth: 700 }}>
-            <div className="card" style={{ padding: '28px' }}>
-              <div className="section-label" style={{ marginBottom: 16 }}>Free</div>
-              <div className="serif" style={{ fontSize: 36, fontWeight: 600, marginBottom: 4 }}>$0</div>
-              <div className="sans muted" style={{ fontSize: 13, marginBottom: 24 }}>No credit card required</div>
-              <ul className="sans" style={{ listStyle: 'none', fontSize: 14, color: '#4a4a3e', lineHeight: 1.6 }}>
-                {['1 featured analysis per day', 'Email alerts (free digest)', 'Latest filing only'].map((f, i) => (
-                  <li key={i} style={{ padding: '9px 0', borderBottom: '1px solid #ede9e0', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                    <span style={{ color: '#c8c4b8', marginTop: 2 }}>–</span>{f}
-                  </li>
-                ))}
-              </ul>
-              <a href="/dashboard" className="btn-outline" style={{ marginTop: 24, display: 'block', textAlign: 'center' }}>Start free</a>
-            </div>
-
-            <div style={{ background: '#1a1a16', color: '#faf8f3', padding: '28px', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: 0, right: 24, background: '#c0392b', color: '#fff', fontSize: 10, fontFamily: 'Source Sans 3, sans-serif', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '5px 12px' }}>Early access</div>
-              <div className="section-label" style={{ marginBottom: 16, color: '#a8a89a' }}>Pro</div>
-              <div className="serif" style={{ fontSize: 36, fontWeight: 600, marginBottom: 4, color: '#faf8f3' }}>$9<span className="sans" style={{ fontSize: 15, fontWeight: 300, color: '#6b6b5a' }}>/month</span></div>
-              <div className="sans" style={{ fontSize: 13, color: '#6b6b5a', marginBottom: 24 }}>Cancel anytime</div>
-              <ul className="sans" style={{ listStyle: 'none', fontSize: 14, color: '#c8c4b8', lineHeight: 1.6 }}>
-                {[
-                  'All active tender offers',
-                  'Full AI analysis on every filing',
-                  'Real-time email alerts',
-                  'BUY / WATCH / AVOID signals',
-                  'Offer price vs market price',
-                  'Premium calculation',
-                ].map((f, i) => (
-                  <li key={i} style={{ padding: '9px 0', borderBottom: '1px solid #2a2a26', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                    <span style={{ color: '#c0392b', marginTop: 2 }}>✓</span>{f}
-                  </li>
-                ))}
-              </ul>
-              <a href="/subscribe" className="btn-primary" style={{ marginTop: 24, display: 'block', textAlign: 'center', background: '#fff', color: '#1a1a16' }}>Subscribe for $9/month →</a>
-            </div>
-          </div>
-        </div>
-      </section>
+<section id="pricing" style={{ padding: '56px 40px', borderBottom: '1px solid #e0ddd4' }}>
+  <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+    <div className="section-label" style={{ marginBottom: 16 }}>Pricing</div>
+    <p className="sans" style={{ fontSize: 14, color: '#6b6b5a', marginBottom: 40, maxWidth: 520 }}>
+      The featured analysis above is always free. Subscribe to unlock all active opportunities, real-time alerts, and full access to every filing.
+    </p>
+    <div style={{ maxWidth: 360 }}>
+      <div style={{ background: '#1a1a16', color: '#faf8f3', padding: '32px', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: 0, right: 24, background: '#c0392b', color: '#fff', fontSize: 10, fontFamily: 'Source Sans 3, sans-serif', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '5px 12px' }}>Early access</div>
+        <div className="section-label" style={{ marginBottom: 16, color: '#a8a89a' }}>Pro</div>
+        <div className="serif" style={{ fontSize: 40, fontWeight: 600, marginBottom: 4, color: '#faf8f3' }}>$9<span className="sans" style={{ fontSize: 15, fontWeight: 300, color: '#6b6b5a' }}>/month</span></div>
+        <div className="sans" style={{ fontSize: 13, color: '#6b6b5a', marginBottom: 28 }}>Cancel anytime · No commitment</div>
+        <ul className="sans" style={{ listStyle: 'none', fontSize: 14, color: '#c8c4b8', lineHeight: 1.6 }}>
+          {[
+            'All active tender offers',
+            'Full AI analysis on every filing',
+            'Real-time email alerts',
+            'BUY / WATCH / AVOID signals',
+            'Offer price vs market price',
+            'Premium calculation',
+          ].map((f, i) => (
+            <li key={i} style={{ padding: '9px 0', borderBottom: '1px solid #2a2a26', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              <span style={{ color: '#c0392b', marginTop: 2 }}>✓</span>{f}
+            </li>
+          ))}
+        </ul>
+        <a href="/subscribe" className="btn-primary" style={{ marginTop: 28, display: 'block', textAlign: 'center', background: '#fff', color: '#1a1a16' }}>Subscribe for $9/month →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* FAQ */}
       <section id="faq" style={{ padding: '56px 40px', borderBottom: '1px solid #e0ddd4', background: '#fff' }}>
