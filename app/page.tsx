@@ -4,281 +4,259 @@ const sampleAnalysis = {
   ticker: 'SCHL',
   company: 'Scholastic Corporation',
   form: 'SC TO-I',
-  fileDate: '2026-03-28',
+  fileDate: 'March 28, 2026',
   marketPrice: 39.20,
   offerPrice: 45.00,
   premium: 14.8,
   recommendation: 'WATCH',
-  analysis: `Scholastic has filed an issuer tender offer to repurchase shares at $45.00 per share in cash. With the stock currently trading at $39.20, this represents a **14.8% premium** over the current market price.
-
-**Offer Terms:** Up to $150M in shares at $45.00 fixed price. Expiration in 20 business days. No financing condition — fully funded from existing cash reserves.
-
-**Opportunity:** If you purchase shares below $45.00 and tender them, you lock in a risk-adjusted return of up to 14.8% in approximately 4 weeks. The company has strong balance sheet with $280M in cash, making completion highly likely.
-
-**Key Risks:** Proration risk if oversubscribed — you may not get all shares accepted. Share price may decline if offer fails or is withdrawn.
-
-**Recommendation: WATCH** — Monitor the offer expiration date and proration levels. If the stock dips below $42, the risk/reward becomes more attractive.`
+  analysis: `Scholastic has filed an issuer tender offer to repurchase shares at **$45.00 per share** in cash. With the stock currently trading at $39.20, this represents a **14.8% premium** over the current market price.\n\n**Offer Terms:** Up to $150M in shares at $45.00 fixed price. Expiration in 20 business days. No financing condition — fully funded from existing cash reserves.\n\n**Opportunity:** If you purchase shares below $45.00 and tender them, you lock in a risk-adjusted return of up to 14.8% in approximately 4 weeks. The company has a strong balance sheet with $280M in cash, making completion highly likely.\n\n**Key Risks:** Proration risk if oversubscribed — you may not get all shares accepted. Share price may decline if offer fails or is withdrawn.\n\n**Recommendation: WATCH** — Monitor the offer expiration date and proration levels. If the stock dips below $42, the risk/reward becomes more attractive.`
 }
 
 export default function LandingPage() {
   return (
     <div style={{
       fontFamily: '"Georgia", "Times New Roman", serif',
-      background: '#0a0a0a',
-      color: '#e8e4d9',
+      background: '#faf8f3',
+      color: '#1a1a16',
       minHeight: '100vh',
-      overflowX: 'hidden'
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .serif { font-family: 'Playfair Display', Georgia, serif; }
-        .sans { font-family: 'DM Sans', system-ui, sans-serif; }
-        .accent { color: #b8f54a; }
-        .accent-dim { color: #8ab835; }
-        .muted { color: #6b6b5e; }
+        .sans { font-family: 'Source Sans 3', system-ui, sans-serif; }
+        .muted { color: #6b6b5a; }
+        .ink { color: #1a1a16; }
+        .red { color: #c0392b; }
+        a { color: inherit; }
+        .divider { border: none; border-top: 1px solid #e0ddd4; }
+        .thin-divider { border: none; border-top: 1px solid #ede9e0; }
         .card {
-          background: #111110;
-          border: 1px solid #222220;
-          border-radius: 4px;
+          background: #fff;
+          border: 1px solid #e0ddd4;
         }
         .btn-primary {
-          background: #b8f54a;
-          color: #0a0a0a;
+          background: #1a1a16;
+          color: #faf8f3;
           border: none;
-          padding: 14px 32px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 15px;
+          padding: 12px 28px;
+          font-family: 'Source Sans 3', sans-serif;
+          font-size: 14px;
           font-weight: 500;
-          border-radius: 3px;
           cursor: pointer;
-          letter-spacing: 0.02em;
+          letter-spacing: 0.04em;
           text-decoration: none;
           display: inline-block;
           transition: background 0.15s;
         }
-        .btn-primary:hover { background: #ceff5e; }
+        .btn-primary:hover { background: #333330; }
         .btn-outline {
           background: transparent;
-          color: #e8e4d9;
-          border: 1px solid #333330;
-          padding: 13px 28px;
-          font-family: 'DM Sans', sans-serif;
+          color: #1a1a16;
+          border: 1px solid #1a1a16;
+          padding: 11px 24px;
+          font-family: 'Source Sans 3', sans-serif;
           font-size: 14px;
-          border-radius: 3px;
           cursor: pointer;
           text-decoration: none;
           display: inline-block;
-          transition: border-color 0.15s;
+          transition: all 0.15s;
+          letter-spacing: 0.02em;
         }
-        .btn-outline:hover { border-color: #666660; }
+        .btn-outline:hover { background: #1a1a16; color: #faf8f3; }
         .tag {
           display: inline-block;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 0.08em;
+          font-family: 'Source Sans 3', sans-serif;
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          padding: 4px 10px;
-          border-radius: 2px;
+          padding: 3px 8px;
+          border: 1px solid;
         }
-        .tag-green { background: #1a2e0a; color: #b8f54a; border: 1px solid #2a4a12; }
-        .tag-yellow { background: #2a2510; color: #e8c84a; border: 1px solid #3a3518; }
-        .tag-red { background: #2a1010; color: #e85a4a; border: 1px solid #3a1818; }
-        .divider { border: none; border-top: 1px solid #1a1a18; margin: 0; }
-        .blur-overlay {
-          position: relative;
-          overflow: hidden;
+        .tag-buy { color: #1a6b35; border-color: #1a6b35; background: #f0f8f3; }
+        .tag-watch { color: #8b5e00; border-color: #8b5e00; background: #fdf8f0; }
+        .tag-avoid { color: #c0392b; border-color: #c0392b; background: #fdf3f2; }
+        .tag-neutral { color: #6b6b5a; border-color: #c8c4b8; background: #f8f6f0; }
+        .ticker {
+          font-family: 'Source Sans 3', monospace;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          color: #c0392b;
         }
-        .blur-overlay::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 200px;
-          background: linear-gradient(to bottom, transparent, #0a0a0a);
+        .metric-val {
+          font-family: 'Playfair Display', serif;
+          font-size: 28px;
+          font-weight: 600;
+          letter-spacing: -0.01em;
+        }
+        .section-label {
+          font-family: 'Source Sans 3', sans-serif;
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #6b6b5a;
+        }
+        .blur-row {
+          filter: blur(4px);
+          user-select: none;
           pointer-events: none;
         }
-        .metric {
-          font-family: 'DM Sans', sans-serif;
+        input[type="email"] {
+          border: 1px solid #c8c4b8;
+          background: #fff;
+          padding: 11px 16px;
+          font-family: 'Source Sans 3', sans-serif;
+          font-size: 14px;
+          color: #1a1a16;
+          outline: none;
+          width: 100%;
         }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(20px); }
+        input[type="email"]:focus { border-color: #1a1a16; }
+        input[type="email"]::placeholder { color: #a8a89a; }
+        .prose p { margin-bottom: 14px; line-height: 1.8; color: #3a3a32; }
+        .prose strong { color: #1a1a16; font-weight: 600; }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(12px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .fade-up { animation: fadeUp 0.6s ease forwards; }
-        .fade-up-2 { animation: fadeUp 0.6s 0.15s ease forwards; opacity: 0; }
-        .fade-up-3 { animation: fadeUp 0.6s 0.3s ease forwards; opacity: 0; }
-        .ticker-badge {
-          font-family: 'DM Sans', monospace;
-          font-size: 11px;
-          font-weight: 500;
-          background: #1a1a18;
-          border: 1px solid #2a2a28;
-          padding: 3px 8px;
-          border-radius: 2px;
-          letter-spacing: 0.05em;
-        }
-        .step-num {
-          font-family: 'Playfair Display', serif;
-          font-size: 48px;
-          color: #1e1e1c;
-          font-weight: 700;
-          line-height: 1;
-          position: absolute;
-          top: -8px;
-          left: 0;
-        }
-        .lock-card {
-          background: #0e0e0c;
-          border: 1px solid #1e1e1c;
-          border-radius: 4px;
-          padding: 20px 24px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-        }
-        .prose p { margin-bottom: 12px; line-height: 1.75; }
-        .prose strong { color: #e8e4d9; font-weight: 500; }
+        .fade { animation: fadeIn 0.5s ease forwards; }
+        .fade-2 { animation: fadeIn 0.5s 0.1s ease forwards; opacity: 0; }
+        .fade-3 { animation: fadeIn 0.5s 0.2s ease forwards; opacity: 0; }
       `}</style>
 
-      {/* NAV */}
-      <nav style={{ borderBottom: '1px solid #1a1a18', padding: '0 40px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span className="serif" style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em' }}>StockSteal</span>
-            <span className="sans muted" style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Beta</span>
+      {/* TOP BAR */}
+      <div style={{ background: '#1a1a16', color: '#faf8f3', padding: '8px 40px', textAlign: 'center' }}>
+        <span className="sans" style={{ fontSize: 12, letterSpacing: '0.04em' }}>
+          Early access — First 100 subscribers at <strong>$9/month</strong> · No credit card required to try
+        </span>
+      </div>
+
+      {/* MASTHEAD */}
+      <header style={{ borderBottom: '3px solid #1a1a16', padding: '0 40px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ padding: '20px 0 16px', textAlign: 'center', borderBottom: '1px solid #e0ddd4', marginBottom: 14 }}>
+            <h1 className="serif" style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1 }}>StockSteal</h1>
+            <p className="sans" style={{ fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#6b6b5a', marginTop: 6 }}>
+              SEC Tender Offer Intelligence · Published Daily
+            </p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            <a href="#how" className="sans muted" style={{ fontSize: 13, textDecoration: 'none', letterSpacing: '0.03em' }}>How it works</a>
-            <a href="#pricing" className="sans muted" style={{ fontSize: 13, textDecoration: 'none', letterSpacing: '0.03em' }}>Pricing</a>
-            <a href="/dashboard" className="btn-outline" style={{ padding: '8px 18px', fontSize: 13 }}>Dashboard</a>
-          </div>
+          <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 14 }}>
+            <div style={{ display: 'flex', gap: 28 }}>
+              {['Opportunities', 'How it works', 'Pricing', 'FAQ'].map(item => (
+                <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="sans" style={{ fontSize: 13, letterSpacing: '0.04em', textDecoration: 'none', color: '#3a3a32' }}>{item}</a>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <a href="/dashboard" className="btn-outline" style={{ padding: '7px 16px', fontSize: 12 }}>View dashboard</a>
+              <a href="#pricing" className="btn-primary" style={{ padding: '7px 16px', fontSize: 12 }}>Subscribe $9/mo</a>
+            </div>
+          </nav>
         </div>
-      </nav>
+      </header>
 
       {/* HERO */}
-      <section style={{ padding: '100px 40px 80px', maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ maxWidth: 720 }}>
-          <div className="fade-up sans" style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#b8f54a', marginBottom: 24, fontWeight: 500 }}>
-            SEC EDGAR · Real-time · AI-powered
-          </div>
-          <h1 className="serif fade-up-2" style={{ fontSize: 'clamp(42px, 6vw, 72px)', lineHeight: 1.08, fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 28 }}>
-            Find tender offer<br />
-            opportunities <span style={{ fontStyle: 'italic', color: '#b8f54a' }}>before</span><br />
-            the market does.
-          </h1>
-          <p className="sans fade-up-3" style={{ fontSize: 16, lineHeight: 1.7, color: '#9a9a8e', maxWidth: 520, marginBottom: 40 }}>
-            StockSteal monitors every SEC tender offer filing in real time, extracts the key numbers from the legal documents, and tells you whether there's a buying opportunity — in plain English.
-          </p>
-          <div className="fade-up-3" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <a href="#example" className="btn-primary">See a live analysis ↓</a>
-            <a href="#pricing" className="btn-outline">Start for $9/month</a>
-          </div>
-        </div>
-
-        {/* STATS ROW */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, marginTop: 80, background: '#1a1a18', borderRadius: 4, overflow: 'hidden' }}>
-          {[
-            { value: '< 60s', label: 'From SEC filing to analysis' },
-            { value: '500+', label: 'Tender offers tracked per year' },
-            { value: '$9', label: 'Per month, cancel anytime' },
-          ].map((s, i) => (
-            <div key={i} style={{ background: '#0a0a0a', padding: '28px 32px' }}>
-              <div className="serif" style={{ fontSize: 36, fontWeight: 600, color: '#e8e4d9', letterSpacing: '-0.02em' }}>{s.value}</div>
-              <div className="sans muted" style={{ fontSize: 13, marginTop: 6, lineHeight: 1.4 }}>{s.label}</div>
+      <section style={{ padding: '60px 40px 48px', borderBottom: '1px solid #e0ddd4' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 380px', gap: 60, alignItems: 'start' }}>
+          <div>
+            <div className="sans fade" style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#c0392b', marginBottom: 20, fontWeight: 600 }}>
+              Special Situations · Tender Offers · Corporate Actions
             </div>
-          ))}
-        </div>
-      </section>
+            <h2 className="serif fade-2" style={{ fontSize: 'clamp(36px, 4.5vw, 56px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: 24 }}>
+              Every U.S. tender offer,<br />
+              analyzed within <em>60 seconds</em><br />
+              of SEC filing.
+            </h2>
+            <p className="sans fade-3" style={{ fontSize: 16, lineHeight: 1.75, color: '#4a4a3e', maxWidth: 540, marginBottom: 32 }}>
+              StockSteal monitors EDGAR around the clock, reads the legal documents so you don't have to, and delivers a clear BUY / WATCH / AVOID signal with the numbers that matter — offer price, current price, premium, and expiration.
+            </p>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <a href="#example" className="btn-primary">Read a sample analysis ↓</a>
+              <a href="#pricing" className="btn-outline">Start for $9/month</a>
+            </div>
+          </div>
 
-      {/* HOW IT WORKS */}
-      <section id="how" style={{ padding: '80px 40px', borderTop: '1px solid #1a1a18' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div className="sans" style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#6b6b5e', marginBottom: 48 }}>How it works</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 48 }}>
-            {[
-              {
-                n: '01',
-                title: 'EDGAR is monitored 24/7',
-                body: 'Every SC TO-I and SC TO-T filing is detected within minutes of publication. No manual searching required.'
-              },
-              {
-                n: '02',
-                title: 'Documents are parsed automatically',
-                body: 'Our AI reads the full legal document and extracts the offer price, expiration date, premium, and conditions.'
-              },
-              {
-                n: '03',
-                title: 'You get a clear recommendation',
-                body: 'BUY, WATCH, or AVOID — with specific numbers, risk factors, and next steps. No jargon, no guesswork.'
-              }
-            ].map((s, i) => (
-              <div key={i} style={{ position: 'relative', paddingTop: 40 }}>
-                <span className="step-num">{s.n}</span>
-                <h3 className="sans" style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#b8f54a', marginBottom: 12 }}>{s.title}</h3>
-                <p className="sans" style={{ fontSize: 15, lineHeight: 1.7, color: '#9a9a8e' }}>{s.body}</p>
-              </div>
-            ))}
+          {/* NEWSLETTER SIGNUP */}
+          <div style={{ background: '#fff', border: '1px solid #e0ddd4', padding: '28px 28px 24px' }}>
+            <div className="section-label" style={{ marginBottom: 16 }}>Free daily digest</div>
+            <h3 className="serif" style={{ fontSize: 22, fontWeight: 600, marginBottom: 10, lineHeight: 1.3 }}>Get tender offer alerts in your inbox</h3>
+            <p className="sans" style={{ fontSize: 13, color: '#6b6b5a', lineHeight: 1.6, marginBottom: 20 }}>
+              One email per day when new opportunities are detected. Free forever. No spam.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <input type="email" placeholder="your@email.com" />
+              <button className="btn-primary" style={{ width: '100%', textAlign: 'center' }}>
+                Get free alerts →
+              </button>
+            </div>
+            <p className="sans" style={{ fontSize: 11, color: '#a8a89a', marginTop: 12, lineHeight: 1.5 }}>
+              By subscribing you agree to receive daily emails. Unsubscribe at any time. Not investment advice.
+            </p>
+            <hr className="thin-divider" style={{ margin: '20px 0 16px' }} />
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              {[['500+', 'Offers tracked'], ['~15', 'Active monthly'], ['$9', 'Full access']].map(([v, l]) => (
+                <div key={l} style={{ textAlign: 'center' }}>
+                  <div className="serif" style={{ fontSize: 22, fontWeight: 600 }}>{v}</div>
+                  <div className="sans" style={{ fontSize: 11, color: '#6b6b5a', letterSpacing: '0.04em' }}>{l}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* LIVE EXAMPLE */}
-      <section id="example" style={{ padding: '80px 40px', borderTop: '1px solid #1a1a18' }}>
+      <section id="example" style={{ padding: '56px 40px', borderBottom: '1px solid #e0ddd4' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
             <div>
-              <div className="sans" style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#6b6b5e', marginBottom: 12 }}>Live example — free</div>
-              <h2 className="serif" style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.02em' }}>A real tender offer, fully analyzed</h2>
+              <div className="section-label" style={{ marginBottom: 10 }}>Sample analysis · Free</div>
+              <h2 className="serif" style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.01em' }}>Today's featured opportunity</h2>
             </div>
-            <span className="tag tag-green">Latest filing</span>
+            <span className="tag tag-watch">Latest filing</span>
           </div>
 
-          {/* ANALYSIS CARD */}
           <div className="card" style={{ padding: '32px 36px' }}>
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
+            {/* Filing header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                  <span className="ticker-badge">{sampleAnalysis.ticker}</span>
-                  <span className="tag tag-yellow">Issuer buyback</span>
-                  <span className="sans muted" style={{ fontSize: 12 }}>8 days ago</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                  <span className="ticker">{sampleAnalysis.ticker}</span>
+                  <span className="tag tag-neutral">Issuer buyback</span>
+                  <span className="sans muted" style={{ fontSize: 12 }}>{sampleAnalysis.fileDate}</span>
                 </div>
-                <h3 className="serif" style={{ fontSize: 24, fontWeight: 600, letterSpacing: '-0.01em' }}>{sampleAnalysis.company}</h3>
-                <p className="sans muted" style={{ fontSize: 13, marginTop: 4 }}>{sampleAnalysis.form} · NASDAQ</p>
+                <h3 className="serif" style={{ fontSize: 26, fontWeight: 600, letterSpacing: '-0.01em' }}>{sampleAnalysis.company}</h3>
+                <p className="sans muted" style={{ fontSize: 13, marginTop: 3 }}>{sampleAnalysis.form} · NASDAQ Global Select Market</p>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div className="sans" style={{ fontSize: 28, fontWeight: 500, letterSpacing: '-0.02em' }}>${sampleAnalysis.marketPrice}</div>
-                <div className="sans" style={{ fontSize: 12, color: '#b8f54a', marginTop: 2 }}>Market price</div>
+                <div className="serif" style={{ fontSize: 32, fontWeight: 600 }}>${sampleAnalysis.marketPrice}</div>
+                <div className="sans" style={{ fontSize: 12, color: '#6b6b5a', marginTop: 2 }}>Last close</div>
               </div>
             </div>
 
-            <hr className="divider" style={{ marginBottom: 28 }} />
+            <hr className="divider" style={{ marginBottom: 24 }} />
 
-            {/* METRICS */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginBottom: 28 }}>
+            {/* Key metrics */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, marginBottom: 28, border: '1px solid #e0ddd4' }}>
               {[
-                { label: 'Offer price', value: `$${sampleAnalysis.offerPrice}`, highlight: true },
-                { label: 'Premium', value: `+${sampleAnalysis.premium}%`, highlight: true },
-                { label: 'Form type', value: sampleAnalysis.form, highlight: false },
-                { label: 'Recommendation', value: sampleAnalysis.recommendation, highlight: false },
+                { label: 'Offer price', value: `$${sampleAnalysis.offerPrice}` },
+                { label: 'Premium to market', value: `+${sampleAnalysis.premium}%` },
+                { label: 'Form type', value: sampleAnalysis.form },
+                { label: 'Signal', value: sampleAnalysis.recommendation },
               ].map((m, i) => (
-                <div key={i} style={{ background: '#0e0e0c', border: '1px solid #1e1e1c', borderRadius: 3, padding: '14px 16px' }}>
-                  <div className="sans muted" style={{ fontSize: 11, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 6 }}>{m.label}</div>
-                  <div className="sans" style={{ fontSize: 18, fontWeight: 500, color: m.highlight ? '#b8f54a' : '#e8e4d9' }}>{m.value}</div>
+                <div key={i} style={{ padding: '16px 20px', borderRight: i < 3 ? '1px solid #e0ddd4' : 'none', background: i === 1 ? '#f8f6f0' : 'transparent' }}>
+                  <div className="sans" style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#6b6b5a', marginBottom: 6 }}>{m.label}</div>
+                  <div className="serif" style={{ fontSize: 22, fontWeight: 600, color: i === 1 ? '#1a6b35' : '#1a1a16' }}>{m.value}</div>
                 </div>
               ))}
             </div>
 
-            <hr className="divider" style={{ marginBottom: 28 }} />
-
-            {/* ANALYSIS TEXT */}
+            {/* Analysis */}
             <div>
-              <div className="sans" style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b6b5e', marginBottom: 16 }}>AI Analysis · Based on filing document</div>
-              <div className="sans prose" style={{ fontSize: 14, color: '#9a9a8e', lineHeight: 1.75 }}>
+              <div className="section-label" style={{ marginBottom: 14 }}>Full analysis · Based on SEC filing document</div>
+              <div className="sans prose" style={{ fontSize: 15 }}>
                 {sampleAnalysis.analysis.split('\n\n').map((para, i) => (
                   <p key={i} dangerouslySetInnerHTML={{ __html: para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                 ))}
@@ -286,117 +264,128 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* LOCKED CARDS */}
-          <div style={{ marginTop: 16 }}>
-            <div className="sans" style={{ fontSize: 12, color: '#6b6b5e', marginBottom: 12, letterSpacing: '0.04em' }}>
-              + 3 more active opportunities
+          {/* Blurred locked cards */}
+          <div style={{ marginTop: 4 }}>
+            <div style={{ background: '#fff3f2', border: '1px solid #f0d8d6', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <p className="sans" style={{ fontSize: 13, color: '#8b2020' }}>
+                <strong>3 more active opportunities</strong> are available to Pro subscribers.
+              </p>
+              <a href="#pricing" className="btn-primary" style={{ background: '#c0392b', fontSize: 13, padding: '9px 20px' }}>Unlock for $9/month →</a>
             </div>
             {[
-              { ticker: 'DAWN', company: 'Day One Biopharmaceuticals', premium: '+18.2%', rec: 'BUY' },
-              { ticker: 'RBNE', company: 'Robin Energy Ltd.', premium: '+9.4%', rec: 'WATCH' },
-              { ticker: 'MRSN', company: 'Mersana Therapeutics', premium: '-14.0%', rec: 'AVOID' },
+              { ticker: 'DAWN', company: 'Day One Biopharmaceuticals', type: 'Third-party offer', premium: '+18.2%', rec: 'BUY' },
+              { ticker: 'RBNE', company: 'Robin Energy Ltd.', type: 'Issuer buyback', premium: '+9.4%', rec: 'WATCH' },
+              { ticker: 'MRSN', company: 'Mersana Therapeutics', type: 'Third-party offer', premium: '-14.0%', rec: 'AVOID' },
             ].map((f, i) => (
-              <div key={i} className="lock-card" style={{ marginBottom: 8, filter: 'blur(3px)', userSelect: 'none', pointerEvents: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <span className="ticker-badge">{f.ticker}</span>
-                  <span className="sans" style={{ fontSize: 14, color: '#9a9a8e' }}>{f.company}</span>
-                </div>
+              <div key={i} className="blur-row" style={{ background: '#fff', border: '1px solid #e0ddd4', borderTop: 'none', padding: '18px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <span className="sans" style={{ fontSize: 14, color: '#b8f54a' }}>{f.premium}</span>
-                  <span className={`tag ${f.rec === 'BUY' ? 'tag-green' : f.rec === 'WATCH' ? 'tag-yellow' : 'tag-red'}`}>{f.rec}</span>
+                  <span className="ticker">{f.ticker}</span>
+                  <span className="sans" style={{ fontSize: 15, color: '#1a1a16' }}>{f.company}</span>
+                  <span className="tag tag-neutral" style={{ fontSize: 10 }}>{f.type}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                  <span className="serif" style={{ fontSize: 18, color: f.premium.startsWith('+') ? '#1a6b35' : '#c0392b' }}>{f.premium}</span>
+                  <span className={`tag ${f.rec === 'BUY' ? 'tag-buy' : f.rec === 'WATCH' ? 'tag-watch' : 'tag-avoid'}`}>{f.rec}</span>
                 </div>
               </div>
             ))}
-            <div style={{ textAlign: 'center', marginTop: 24 }}>
-              <a href="#pricing" className="btn-primary">Unlock all opportunities →</a>
-            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" style={{ padding: '56px 40px', borderBottom: '1px solid #e0ddd4', background: '#fff' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div className="section-label" style={{ marginBottom: 40 }}>How it works</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, border: '1px solid #e0ddd4' }}>
+            {[
+              { n: 'I', title: 'EDGAR monitored continuously', body: 'Every SC TO-I and SC TO-T filing is detected within minutes of publication on the SEC database. No manual searching required on your part.' },
+              { n: 'II', title: 'Legal documents parsed by AI', body: 'Our system reads the full offering document — sometimes 80 pages — and extracts offer price, expiration date, conditions, and total deal size automatically.' },
+              { n: 'III', title: 'Clear signal delivered to you', body: 'You receive a BUY, WATCH, or AVOID recommendation with specific numbers, risk factors, and what to monitor next — in plain English, within 60 seconds.' },
+            ].map((s, i) => (
+              <div key={i} style={{ padding: '32px 28px', borderRight: i < 2 ? '1px solid #e0ddd4' : 'none' }}>
+                <div className="serif" style={{ fontSize: 40, color: '#e0ddd4', fontWeight: 700, lineHeight: 1, marginBottom: 20 }}>{s.n}</div>
+                <h3 className="sans" style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#1a1a16', marginBottom: 10 }}>{s.title}</h3>
+                <p className="sans" style={{ fontSize: 14, color: '#6b6b5a', lineHeight: 1.7 }}>{s.body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* PRICING */}
-      <section id="pricing" style={{ padding: '80px 40px', borderTop: '1px solid #1a1a18' }}>
+      <section id="pricing" style={{ padding: '56px 40px', borderBottom: '1px solid #e0ddd4' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div className="sans" style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#6b6b5e', marginBottom: 48 }}>Pricing</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, maxWidth: 720 }}>
-
-            {/* FREE */}
-            <div className="card" style={{ padding: '32px' }}>
-              <div className="sans muted" style={{ fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 20 }}>Free</div>
-              <div className="serif" style={{ fontSize: 40, fontWeight: 600, letterSpacing: '-0.02em', marginBottom: 4 }}>$0</div>
-              <div className="sans muted" style={{ fontSize: 13, marginBottom: 28 }}>No credit card required</div>
-              <ul className="sans" style={{ listStyle: 'none', fontSize: 14, color: '#9a9a8e', lineHeight: 1.6 }}>
-                {['1 full analysis per day', 'Latest tender offer only', 'No email alerts'].map((f, i) => (
-                  <li key={i} style={{ paddingBottom: 10, borderBottom: '1px solid #1a1a18', marginBottom: 10, display: 'flex', gap: 10 }}>
-                    <span style={{ color: '#333' }}>—</span> {f}
+          <div className="section-label" style={{ marginBottom: 40 }}>Pricing</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, maxWidth: 700 }}>
+            <div className="card" style={{ padding: '28px' }}>
+              <div className="section-label" style={{ marginBottom: 16 }}>Free</div>
+              <div className="serif" style={{ fontSize: 36, fontWeight: 600, marginBottom: 4 }}>$0</div>
+              <div className="sans muted" style={{ fontSize: 13, marginBottom: 24 }}>No credit card required</div>
+              <ul className="sans" style={{ listStyle: 'none', fontSize: 14, color: '#4a4a3e', lineHeight: 1.6 }}>
+                {['1 featured analysis per day', 'Email alerts (free digest)', 'Latest filing only'].map((f, i) => (
+                  <li key={i} style={{ padding: '9px 0', borderBottom: '1px solid #ede9e0', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <span style={{ color: '#c8c4b8', marginTop: 2 }}>–</span>{f}
                   </li>
                 ))}
               </ul>
-              <a href="/dashboard" className="btn-outline" style={{ marginTop: 24, display: 'block', textAlign: 'center' }}>View free analysis</a>
+              <a href="/dashboard" className="btn-outline" style={{ marginTop: 24, display: 'block', textAlign: 'center' }}>Start free</a>
             </div>
 
-            {/* PRO */}
-            <div style={{ background: '#111', border: '1px solid #b8f54a', borderRadius: 4, padding: '32px', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: -1, right: 24, background: '#b8f54a', color: '#0a0a0a', fontSize: 10, fontFamily: 'DM Sans, sans-serif', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '4px 12px', borderRadius: '0 0 4px 4px' }}>Most popular</div>
-              <div className="sans" style={{ fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#b8f54a', marginBottom: 20 }}>Pro</div>
-              <div className="serif" style={{ fontSize: 40, fontWeight: 600, letterSpacing: '-0.02em', marginBottom: 4 }}>$9<span className="sans" style={{ fontSize: 16, fontWeight: 400, color: '#6b6b5e' }}>/mo</span></div>
-              <div className="sans muted" style={{ fontSize: 13, marginBottom: 28 }}>Cancel anytime</div>
-              <ul className="sans" style={{ listStyle: 'none', fontSize: 14, color: '#9a9a8e', lineHeight: 1.6 }}>
+            <div style={{ background: '#1a1a16', color: '#faf8f3', padding: '28px', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: 0, right: 24, background: '#c0392b', color: '#fff', fontSize: 10, fontFamily: 'Source Sans 3, sans-serif', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '5px 12px' }}>Early access</div>
+              <div className="section-label" style={{ marginBottom: 16, color: '#a8a89a' }}>Pro</div>
+              <div className="serif" style={{ fontSize: 36, fontWeight: 600, marginBottom: 4, color: '#faf8f3' }}>$9<span className="sans" style={{ fontSize: 15, fontWeight: 300, color: '#6b6b5a' }}>/month</span></div>
+              <div className="sans" style={{ fontSize: 13, color: '#6b6b5a', marginBottom: 24 }}>Cancel anytime</div>
+              <ul className="sans" style={{ listStyle: 'none', fontSize: 14, color: '#c8c4b8', lineHeight: 1.6 }}>
                 {[
                   'All active tender offers',
                   'Full AI analysis on every filing',
                   'Real-time email alerts',
                   'BUY / WATCH / AVOID signals',
-                  'Market price vs offer price',
+                  'Offer price vs market price',
+                  'Premium calculation',
                 ].map((f, i) => (
-                  <li key={i} style={{ paddingBottom: 10, borderBottom: '1px solid #1e1e1c', marginBottom: 10, display: 'flex', gap: 10 }}>
-                    <span style={{ color: '#b8f54a' }}>✓</span> {f}
+                  <li key={i} style={{ padding: '9px 0', borderBottom: '1px solid #2a2a26', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <span style={{ color: '#c0392b', marginTop: 2 }}>✓</span>{f}
                   </li>
                 ))}
               </ul>
-              <a href="/subscribe" className="btn-primary" style={{ marginTop: 24, display: 'block', textAlign: 'center' }}>Start for $9/month →</a>
+              <a href="/subscribe" className="btn-primary" style={{ marginTop: 24, display: 'block', textAlign: 'center', background: '#fff', color: '#1a1a16' }}>Subscribe for $9/month →</a>
             </div>
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section style={{ padding: '80px 40px', borderTop: '1px solid #1a1a18' }}>
+      <section id="faq" style={{ padding: '56px 40px', borderBottom: '1px solid #e0ddd4', background: '#fff' }}>
         <div style={{ maxWidth: 720, margin: '0 auto' }}>
-          <div className="sans" style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#6b6b5e', marginBottom: 48 }}>FAQ</div>
+          <div className="section-label" style={{ marginBottom: 40 }}>Frequently asked questions</div>
           {[
-            {
-              q: 'What is a tender offer?',
-              a: 'A tender offer is when a company (or a third party) offers to buy shares from shareholders at a fixed price, usually above the current market price. If you buy shares below that price and tender them, you make the difference.'
-            },
-            {
-              q: 'How is StockSteal different from just checking EDGAR myself?',
-              a: 'EDGAR publishes raw legal documents of 40-80 pages. StockSteal reads them automatically, extracts the key numbers, fetches the current market price, calculates the premium, and gives you a plain-English recommendation — all within 60 seconds of the filing.'
-            },
-            {
-              q: 'How often are new opportunities added?',
-              a: 'The system checks EDGAR twice daily on trading days. When a new tender offer is detected, it is analyzed and added to your dashboard automatically. You also receive an email alert.'
-            },
-            {
-              q: 'Is this investment advice?',
-              a: 'No. StockSteal provides information and analysis for educational purposes only. Always do your own research and consult a financial advisor before making investment decisions.'
-            },
+            { q: 'What is a tender offer?', a: 'A tender offer is when a company — or a third party — offers to buy shares from existing shareholders at a fixed price, usually above the current market price. If you buy shares below that price and tender them, you capture the difference as a return.' },
+            { q: 'How is StockSteal different from checking EDGAR myself?', a: 'EDGAR publishes raw legal documents of 40–80 pages. StockSteal reads them automatically, extracts the key numbers, fetches the current market price, calculates the premium, and delivers a plain-English recommendation — all within 60 seconds of the filing.' },
+            { q: 'How often are new opportunities added?', a: 'The system checks EDGAR twice daily on trading days. When a new tender offer is detected it is analyzed and added to your dashboard automatically. Pro subscribers also receive an immediate email alert.' },
+            { q: 'Is this investment advice?', a: 'No. StockSteal provides information and analysis for educational and informational purposes only. Always conduct your own research and consult a qualified financial advisor before making investment decisions.' },
           ].map((faq, i) => (
-            <div key={i} style={{ borderBottom: '1px solid #1a1a18', padding: '24px 0' }}>
-              <h3 className="sans" style={{ fontSize: 15, fontWeight: 500, color: '#e8e4d9', marginBottom: 10 }}>{faq.q}</h3>
-              <p className="sans" style={{ fontSize: 14, color: '#6b6b5e', lineHeight: 1.7 }}>{faq.a}</p>
+            <div key={i} style={{ borderBottom: '1px solid #e0ddd4', padding: '22px 0' }}>
+              <h3 className="serif" style={{ fontSize: 17, fontWeight: 600, marginBottom: 10 }}>{faq.q}</h3>
+              <p className="sans" style={{ fontSize: 14, color: '#4a4a3e', lineHeight: 1.75 }}>{faq.a}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer style={{ borderTop: '1px solid #1a1a18', padding: '32px 40px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-          <span className="serif" style={{ fontSize: 16, fontWeight: 600 }}>StockSteal</span>
-          <p className="sans muted" style={{ fontSize: 12 }}>
-            Not investment advice. For informational purposes only. Data sourced from SEC EDGAR.
+      <footer style={{ borderTop: '3px solid #1a1a16', padding: '28px 40px', background: '#faf8f3' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+          <span className="serif" style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.02em' }}>StockSteal</span>
+          <p className="sans" style={{ fontSize: 12, color: '#6b6b5a', maxWidth: 480, textAlign: 'center' }}>
+            Data sourced from SEC EDGAR. Not investment advice. For informational purposes only. StockSteal is not affiliated with the U.S. Securities and Exchange Commission.
           </p>
+          <div style={{ display: 'flex', gap: 20 }}>
+            <a href="#" className="sans muted" style={{ fontSize: 12, textDecoration: 'none' }}>Privacy</a>
+            <a href="#" className="sans muted" style={{ fontSize: 12, textDecoration: 'none' }}>Terms</a>
+          </div>
         </div>
       </footer>
     </div>
