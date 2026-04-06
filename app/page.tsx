@@ -394,10 +394,9 @@ export default function LandingPage() {
           <span className="serif" style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.02em' }}>{t.masthead}</span>
           <p className="sans" style={{ fontSize: 12, color: '#6b6b5a', maxWidth: 480, textAlign: 'center' }}>{t.footerDisclaimer}</p>
           <div style={{ display: 'flex', gap: 20 }}>
-            {t.footerLinks.map((l, i) => (
-              <a key={i} href="#" className="sans muted" style={{ fontSize: 12, textDecoration: 'none' }}>{l}</a>
-            ))}
-          </div>
+            <a href="/privacy" className="sans muted" style={{ fontSize: 12, textDecoration: 'none' }}>{t.footerLinks[0]}</a>
+            <a href="/terms" className="sans muted" style={{ fontSize: 12, textDecoration: 'none' }}>{t.footerLinks[1]}</a>
+         </div>
         </div>
       </footer>
     </div>
