@@ -21,6 +21,8 @@ function getEventType(form: string): string {
   if (form === 'SC 13E-4') return 'issuer_tender_small'
   if (form === 'SC TO-T') return 'third_party_tender'
   if (form === '8-K') return 'buyback'
+  if (form === 'SC 13D') return 'activist_13d'
+  if (form === 'SC 13G') return 'institutional_13g'
   return 'tender_offer'
 }
 
@@ -51,9 +53,9 @@ export async function GET(request: Request) {
       await supabaseAdmin.from('filings').delete().lt('file_date', startdt)
     }
 
-    // Step 2: Fetch tender offers and going-private from EDGAR
+    // Step 2: Fetch tender offers, going-private, and 13D/13G from EDGAR
     const tendersResponse = await fetch(
-      `https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T,SC+13E-4,SC+13E-3&dateRange=custom&startdt=${startdt}&enddt=${enddt}&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=40`,
+      `https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T,SC+13E-4,SC+13E-3,SC+13D,SC+13G&dateRange=custom&startdt=${startdt}&enddt=${enddt}&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=50`,
       {
         headers: {
           'User-Agent': 'StockSteal contact@stocksteal.com',
@@ -65,7 +67,7 @@ export async function GET(request: Request) {
 
     const tenderFilings = tendersData.hits.hits
       .filter((hit: any) =>
-        ['SC TO-I', 'SC TO-T', 'SC 13E-4', 'SC 13E-3'].includes(hit._source.form)
+        ['SC TO-I', 'SC TO-T', 'SC 13E-4', 'SC 13E-3', 'SC 13D', 'SC 13G'].includes(hit._source.form)
       )
       .map((hit: any) => ({
         id: hit._id,
@@ -124,15 +126,17 @@ export async function GET(request: Request) {
       // For 8-K buybacks, verify market cap > $1B
       if (filing.event_type === 'buyback') {
         const ticker = filing.companies[0].match(/\(([A-Z]{2,5})\)/)?.[1]
-        if (!ticker) {
-          skippedCount++
-          continue
-        }
+        if (!ticker) { skippedCount++; continue }
         const marketCap = await getMarketCap(ticker)
-        if (!marketCap || marketCap < 1_000_000_000) {
-          skippedCount++
-          continue
-        }
+        if (!marketCap || marketCap < 1_000_000_000) { skippedCount++; continue }
+      }
+
+      // For SC 13D/13G, verify market cap > $1B to filter small companies
+      if (filing.event_type === 'activist_13d' || filing.event_type === 'institutional_13g') {
+        const ticker = filing.companies[0].match(/\(([A-Z]{2,5})\)/)?.[1]
+        if (!ticker) { skippedCount++; continue }
+        const marketCap = await getMarketCap(ticker)
+        if (!marketCap || marketCap < 1_000_000_000) { skippedCount++; continue }
       }
 
       await supabaseAdmin.from('filings').insert({
@@ -153,7 +157,7 @@ export async function GET(request: Request) {
       saved: savedCount,
       skipped: skippedCount,
       total: allFilings.length,
-      message: `Deleted ${oldFilings?.length || 0} old filings. Saved ${savedCount} new filings. Skipped ${skippedCount} (market cap < $1B or no ticker).`
+      message: `Deleted ${oldFilings?.length || 0} old filings. Saved ${savedCount} new filings. Skipped ${skippedCount}.`
     })
 
   } catch (error) {

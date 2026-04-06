@@ -72,12 +72,16 @@ function getEventContext(form: string, lang: 'en' | 'es'): string {
     if (form === 'SC 13E-4') return 'Esta es una OFERTA DE RECOMPRA DIRECTA de una empresa pequeña que recompra sus propias acciones directamente de los accionistas a un precio fijo, normalmente por encima del precio de mercado.'
     if (form === 'SC TO-T') return 'Esta es una OFERTA DE COMPRA DE TERCEROS donde una empresa externa ofrece adquirir acciones de la compañía objetivo, normalmente a un precio premium.'
     if (form === '8-K') return 'Este es un ANUNCIO DE PROGRAMA DE RECOMPRA DE ACCIONES (buyback). La empresa anuncia que va a recomprar sus propias acciones en el mercado abierto. NO hay precio de oferta fijo ni fecha de vencimiento. Es una señal alcista que indica que la directiva cree que las acciones están infravaloradas.'
+    if (form === 'SC 13D') return 'Este es un registro de INVERSOR ACTIVISTA (SC 13D). Un inversor ha acumulado más del 5% de la empresa con intención de influir en la dirección o estrategia corporativa. Es una señal alcista fuerte — los activistas suelen impulsar cambios que crean valor: recompras, ventas estratégicas, cambios de dirección o escisiones.'
+    if (form === 'SC 13G') return 'Este es un registro de INVERSOR INSTITUCIONAL (SC 13G). Un gran inversor ha acumulado más del 5% de la empresa como inversión pasiva sin intención de influir en la dirección. Señala confianza institucional en la acción a los niveles actuales.'
     return 'Esta es una OFERTA DE RECOMPRA donde la empresa recompra sus propias acciones directamente de los accionistas a un precio fijo.'
   } else {
     if (form === 'SC 13E-3') return 'This is a GOING-PRIVATE transaction. A controlling shareholder or management is offering to buy out public shareholders to delist the company from the stock exchange. These typically involve a significant premium over market price.'
     if (form === 'SC 13E-4') return 'This is an ISSUER TENDER OFFER by a smaller company repurchasing its own shares directly from shareholders at a fixed price, typically above current market price.'
     if (form === 'SC TO-T') return 'This is a THIRD-PARTY TENDER OFFER where an external company is offering to acquire shares of the target company, typically at a premium price.'
     if (form === '8-K') return 'This is a SHARE BUYBACK PROGRAM announcement. The company announces it will repurchase its own shares in the open market. There is NO fixed offer price or expiration date. This is a bullish signal indicating management believes the stock is undervalued.'
+    if (form === 'SC 13D') return 'This is an ACTIVIST INVESTOR filing (SC 13D). An investor has accumulated more than 5% of the company with the intention to influence management or corporate strategy. This is a strong bullish signal — activist investors typically push for value-creating changes: buybacks, strategic sales, leadership changes, or spin-offs.'
+    if (form === 'SC 13G') return 'This is an INSTITUTIONAL INVESTOR filing (SC 13G). A large investor has accumulated more than 5% of the company as a passive investment with no intention to influence management. This signals institutional confidence in the stock at current levels.'
     return 'This is an ISSUER TENDER OFFER where the company is repurchasing its own shares directly from shareholders at a fixed price.'
   }
 }

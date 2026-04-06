@@ -90,9 +90,11 @@ const labels = {
   }
 }
 
-function getBadgeLabel(form: string, eventType: string | undefined, lbl: typeof labels['en']): string {
+function getBadgeLabel(form: string, eventType: string | undefined, lbl: typeof labels['en'], lang: 'en' | 'es'): string {
   if (eventType === 'buyback') return lbl.buyback
   if (eventType === 'going_private') return lbl.goingPrivate
+  if (eventType === 'activist_13d') return lang === 'es' ? 'Activista 13D' : 'Activist 13D'
+  if (eventType === 'institutional_13g') return lang === 'es' ? 'Institucional 13G' : 'Institutional 13G'
   if (form === 'SC TO-T') return lbl.thirdParty
   return lbl.issuerBuyback
 }
@@ -101,6 +103,8 @@ function getBadgeClass(form: string, eventType: string | undefined): string {
   if (eventType === 'buyback') return 'bg-green-50 text-green-700 border border-green-200'
   if (eventType === 'going_private') return 'bg-red-50 text-red-700 border border-red-200'
   if (form === 'SC TO-T') return 'bg-purple-50 text-purple-700 border border-purple-200'
+  if (eventType === 'activist_13d') return 'bg-orange-50 text-orange-700 border border-orange-200'
+  if (eventType === 'institutional_13g') return 'bg-indigo-50 text-indigo-700 border border-indigo-200'
   return 'bg-blue-50 text-blue-700 border border-blue-200'
 }
 
@@ -122,7 +126,7 @@ export function TenderOfferCard({ filing, lang = 'en' }: { filing: Filing, lang?
   const signal = displayAnalysis ? getSignal(displayAnalysis) : null
 
   const badgeClass = getBadgeClass(filing.form, filing.event_type)
-  const badgeLabel = getBadgeLabel(filing.form, filing.event_type, lbl)
+  const badgeLabel = getBadgeLabel(filing.form, filing.event_type, lbl, lang)
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 transition-colors">

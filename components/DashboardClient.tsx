@@ -15,6 +15,8 @@ const t = {
       issuer_tender_small: 'Issuer Tender Offers',
       going_private: 'Going Private',
       buyback: 'Buyback Programs',
+      activist_13d: 'Activist Investors (13D)',
+      institutional_13g: 'Institutional Positions (13G)',
     },
     unlockTitle: 'Unlock all opportunities',
     unlockBody: 'Subscribe to StockSteal Pro for $9/month to access all active analyses.',
@@ -32,6 +34,8 @@ const t = {
       issuer_tender_small: 'Ofertas de Recompra (Pequeñas)',
       going_private: 'Privatizaciones',
       buyback: 'Programas de Recompra',
+      activist_13d: 'Inversores Activistas (13D)',
+      institutional_13g: 'Posiciones Institucionales (13G)',
     },
     unlockTitle: 'Desbloquear todas las oportunidades',
     unlockBody: 'Suscríbete a StockSteal Pro por $9/mes para acceder a todos los análisis activos.',
@@ -46,6 +50,8 @@ const SECTION_ORDER = [
   'issuer_tender_small',
   'going_private',
   'buyback',
+  'activist_13d',
+  'institutional_13g',
 ]
 
 export function DashboardClient({
