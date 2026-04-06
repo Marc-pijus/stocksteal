@@ -8,20 +8,24 @@ const translations = {
     masthead: 'StockSteal',
     mastheadSub: 'SEC Tender Offer Intelligence · Published Daily',
     nav: ['Opportunities', 'How it works', 'Pricing', 'FAQ'],
-    navDashboard: 'View dashboard',
+    navDashboard: 'Sign in',
     navSubscribe: 'Subscribe $9/mo',
     heroLabel: 'Special Situations · Tender Offers · Corporate Actions',
     heroTitle: ['Every U.S. tender offer,', 'analyzed within ', '60 seconds', ' of SEC filing.'],
     heroBody: "StockSteal monitors EDGAR around the clock, reads the legal documents so you don't have to, and delivers a clear BUY / WATCH / AVOID signal with the numbers that matter — offer price, current price, premium, and expiration.",
     heroCta1: 'Read a sample analysis ↓',
     heroCta2: 'Start for $9/month',
-    newsletterLabel: 'Free daily digest',
-    newsletterTitle: 'Get tender offer alerts in your inbox',
-    newsletterBody: 'One email per day when new opportunities are detected. Free forever. No spam.',
-    newsletterPlaceholder: 'your@email.com',
-    newsletterBtn: 'Get free alerts →',
-    newsletterDisclaimer: 'By subscribing you agree to receive daily emails. Unsubscribe at any time. Not investment advice.',
-    statsLabels: ['Offers tracked', 'Active monthly', 'Full access'],
+    alertBoxLabel: 'Real-time email alerts',
+    alertBoxTitle: 'Never miss a buying opportunity',
+    alertBoxBody: 'Every time a new tender offer is detected and analyzed, StockSteal sends you an instant email alert — so you can act before the market catches up.',
+    alertBoxFeatures: [
+      'Instant notification when a new filing appears',
+      'Full analysis included in the email',
+      'BUY / WATCH / AVOID signal at a glance',
+      'Cancel anytime, no commitment',
+    ],
+    alertBoxCta: 'Subscribe for $9/month →',
+    statsLabels: ['Offers tracked/year', 'Active right now', 'Per month'],
     exampleLabel: 'Sample analysis · Free',
     exampleTitle: "Today's featured opportunity",
     filingLabel: 'Latest filing',
@@ -47,7 +51,7 @@ const translations = {
     planFeatures: [
       'All active tender offers',
       'Full AI analysis on every filing',
-      'Real-time email alerts',
+      'Instant email alerts on new opportunities',
       'BUY / WATCH / AVOID signals',
       'Offer price vs market price',
       'Premium calculation',
@@ -57,7 +61,7 @@ const translations = {
     faqs: [
       { q: 'What is a tender offer?', a: 'A tender offer is when a company — or a third party — offers to buy shares from existing shareholders at a fixed price, usually above the current market price. If you buy shares below that price and tender them, you capture the difference as a return.' },
       { q: 'How is StockSteal different from checking EDGAR myself?', a: 'EDGAR publishes raw legal documents of 40–80 pages. StockSteal reads them automatically, extracts the key numbers, fetches the current market price, calculates the premium, and delivers a plain-English recommendation — all within 60 seconds of the filing.' },
-      { q: 'How often are new opportunities added?', a: 'The system checks EDGAR twice daily on trading days. When a new tender offer is detected it is analyzed and added to your dashboard automatically. Pro subscribers also receive an immediate email alert.' },
+      { q: 'How often are new opportunities added?', a: 'The system checks EDGAR twice daily on trading days. When a new tender offer is detected it is analyzed and added to your dashboard automatically. Subscribers also receive an immediate email alert.' },
       { q: 'Is this investment advice?', a: 'No. StockSteal provides information and analysis for educational and informational purposes only. Always conduct your own research and consult a qualified financial advisor before making investment decisions.' },
     ],
     footerDisclaimer: 'Data sourced from SEC EDGAR. Not investment advice. For informational purposes only. StockSteal is not affiliated with the U.S. Securities and Exchange Commission.',
@@ -69,20 +73,24 @@ const translations = {
     masthead: 'StockSteal',
     mastheadSub: 'Inteligencia sobre Ofertas de Compra SEC · Publicado Diariamente',
     nav: ['Oportunidades', 'Cómo funciona', 'Precios', 'FAQ'],
-    navDashboard: 'Ver dashboard',
+    navDashboard: 'Iniciar sesión',
     navSubscribe: 'Suscribirse $9/mes',
     heroLabel: 'Situaciones Especiales · Ofertas de Compra · Acciones Corporativas',
     heroTitle: ['Cada oferta de compra en EE.UU.,', 'analizada en menos de ', '60 segundos', ' tras el registro en la SEC.'],
     heroBody: 'StockSteal monitoriza EDGAR las 24 horas, lee los documentos legales por ti y te entrega una señal clara de COMPRAR / VIGILAR / EVITAR con los números que importan — precio de oferta, precio actual, prima y fecha de vencimiento.',
     heroCta1: 'Ver un análisis de ejemplo ↓',
     heroCta2: 'Empezar por $9/mes',
-    newsletterLabel: 'Resumen diario gratuito',
-    newsletterTitle: 'Recibe alertas de ofertas de compra en tu bandeja de entrada',
-    newsletterBody: 'Un email al día cuando se detectan nuevas oportunidades. Gratis para siempre. Sin spam.',
-    newsletterPlaceholder: 'tu@email.com',
-    newsletterBtn: 'Recibir alertas gratis →',
-    newsletterDisclaimer: 'Al suscribirte aceptas recibir emails diarios. Date de baja en cualquier momento. No es asesoramiento financiero.',
-    statsLabels: ['Ofertas rastreadas', 'Activas al mes', 'Acceso completo'],
+    alertBoxLabel: 'Alertas por email en tiempo real',
+    alertBoxTitle: 'No te pierdas ninguna oportunidad de compra',
+    alertBoxBody: 'Cada vez que se detecta y analiza una nueva oferta de compra, StockSteal te envía una alerta inmediata por email — para que puedas actuar antes que el mercado.',
+    alertBoxFeatures: [
+      'Notificación instantánea cuando aparece un nuevo registro',
+      'Análisis completo incluido en el email',
+      'Señal COMPRAR / VIGILAR / EVITAR de un vistazo',
+      'Cancela cuando quieras, sin compromiso',
+    ],
+    alertBoxCta: 'Suscribirse por $9/mes →',
+    statsLabels: ['Ofertas rastreadas/año', 'Activas ahora', 'Al mes'],
     exampleLabel: 'Análisis de muestra · Gratis',
     exampleTitle: 'Oportunidad destacada de hoy',
     filingLabel: 'Último registro',
@@ -108,7 +116,7 @@ const translations = {
     planFeatures: [
       'Todas las ofertas de compra activas',
       'Análisis completo de IA en cada registro',
-      'Alertas por email en tiempo real',
+      'Alertas instantáneas por email en nuevas oportunidades',
       'Señales COMPRAR / VIGILAR / EVITAR',
       'Precio de oferta vs precio de mercado',
       'Cálculo de prima',
@@ -118,7 +126,7 @@ const translations = {
     faqs: [
       { q: '¿Qué es una oferta de compra (tender offer)?', a: 'Una oferta de compra es cuando una empresa — o un tercero — ofrece comprar acciones a los accionistas existentes a un precio fijo, normalmente por encima del precio de mercado actual. Si compras acciones por debajo de ese precio y las tiendes, capturas la diferencia como rentabilidad.' },
       { q: '¿En qué se diferencia StockSteal de revisar EDGAR yo mismo?', a: 'EDGAR publica documentos legales crudos de 40-80 páginas. StockSteal los lee automáticamente, extrae los números clave, obtiene el precio de mercado actual, calcula la prima y entrega una recomendación en lenguaje claro, todo en menos de 60 segundos desde el registro.' },
-      { q: '¿Con qué frecuencia se añaden nuevas oportunidades?', a: 'El sistema revisa EDGAR dos veces al día en días de trading. Cuando se detecta una nueva oferta de compra, se analiza y añade automáticamente al dashboard. Los suscriptores Pro también reciben una alerta por email inmediata.' },
+      { q: '¿Con qué frecuencia se añaden nuevas oportunidades?', a: 'El sistema revisa EDGAR dos veces al día en días de trading. Cuando se detecta una nueva oferta de compra, se analiza y añade automáticamente al dashboard. Los suscriptores también reciben una alerta por email inmediata.' },
       { q: '¿Es esto asesoramiento financiero?', a: 'No. StockSteal proporciona información y análisis únicamente con fines educativos e informativos. Realiza siempre tu propia investigación y consulta a un asesor financiero cualificado antes de tomar decisiones de inversión.' },
     ],
     footerDisclaimer: 'Datos obtenidos de SEC EDGAR. No es asesoramiento financiero. Solo con fines informativos. StockSteal no está afiliado a la Comisión de Valores y Bolsa de EE.UU.',
@@ -166,14 +174,13 @@ export default function LandingPage() {
         .ticker { font-family: 'Source Sans 3', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: #c0392b; }
         .section-label { font-family: 'Source Sans 3', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #6b6b5a; }
         .blur-row { filter: blur(4px); user-select: none; pointer-events: none; }
-        input[type="email"] { border: 1px solid #c8c4b8; background: #fff; padding: 11px 16px; font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #1a1a16; outline: none; width: 100%; }
-        input[type="email"]:focus { border-color: #1a1a16; }
-        input[type="email"]::placeholder { color: #a8a89a; }
         .prose p { margin-bottom: 14px; line-height: 1.8; color: #3a3a32; font-family: 'Source Sans 3', sans-serif; font-size: 15px; }
         .prose strong { color: #1a1a16; font-weight: 600; }
         .lang-btn { background: transparent; border: 1px solid #c8c4b8; padding: 4px 10px; font-family: 'Source Sans 3', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; letter-spacing: 0.06em; transition: all 0.15s; }
         .lang-btn.active { background: #1a1a16; color: #faf8f3; border-color: #1a1a16; }
         .lang-btn:not(.active):hover { border-color: #1a1a16; }
+        .check-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #3a3a32; line-height: 1.5; }
+        .check-mark { color: #c0392b; font-size: 14px; margin-top: 1px; flex-shrink: 0; }
       `}</style>
 
       {/* TOP BAR */}
@@ -199,7 +206,7 @@ export default function LandingPage() {
               ))}
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
-              <a href="/dashboard" className="btn-outline" style={{ padding: '7px 16px', fontSize: 12 }}>{t.navDashboard}</a>
+              <a href="/login" className="btn-outline" style={{ padding: '7px 16px', fontSize: 12 }}>{t.navDashboard}</a>
               <a href="#pricing" className="btn-primary" style={{ padding: '7px 16px', fontSize: 12 }}>{t.navSubscribe}</a>
             </div>
           </nav>
@@ -222,16 +229,20 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* NEWSLETTER */}
+          {/* ALERT BOX */}
           <div style={{ background: '#fff', border: '1px solid #e0ddd4', padding: '28px 28px 24px' }}>
-            <div className="section-label" style={{ marginBottom: 16 }}>{t.newsletterLabel}</div>
-            <h3 className="serif" style={{ fontSize: 22, fontWeight: 600, marginBottom: 10, lineHeight: 1.3 }}>{t.newsletterTitle}</h3>
-            <p className="sans" style={{ fontSize: 13, color: '#6b6b5a', lineHeight: 1.6, marginBottom: 20 }}>{t.newsletterBody}</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <input type="email" placeholder={t.newsletterPlaceholder} />
-              <button className="btn-primary" style={{ width: '100%', textAlign: 'center' }}>{t.newsletterBtn}</button>
+            <div className="section-label" style={{ marginBottom: 16 }}>{t.alertBoxLabel}</div>
+            <h3 className="serif" style={{ fontSize: 22, fontWeight: 600, marginBottom: 12, lineHeight: 1.3 }}>{t.alertBoxTitle}</h3>
+            <p className="sans" style={{ fontSize: 14, color: '#6b6b5a', lineHeight: 1.7, marginBottom: 20 }}>{t.alertBoxBody}</p>
+            <div style={{ marginBottom: 24 }}>
+              {t.alertBoxFeatures.map((f, i) => (
+                <div key={i} className="check-item">
+                  <span className="check-mark">✓</span>
+                  <span>{f}</span>
+                </div>
+              ))}
             </div>
-            <p className="sans" style={{ fontSize: 11, color: '#a8a89a', marginTop: 12, lineHeight: 1.5 }}>{t.newsletterDisclaimer}</p>
+            <a href="#pricing" className="btn-primary" style={{ display: 'block', textAlign: 'center', width: '100%' }}>{t.alertBoxCta}</a>
             <hr className="thin-divider" style={{ margin: '20px 0 16px' }} />
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               {[['500+', t.statsLabels[0]], ['~15', t.statsLabels[1]], ['$9', t.statsLabels[2]]].map(([v, l]) => (

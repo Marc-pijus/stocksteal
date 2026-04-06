@@ -61,25 +61,6 @@ export function TenderOfferCard({ filing }: { filing: Filing }) {
   const displayHasDocument = freshHasDocument ?? filing.analysis?.has_document ?? null
   const displayMarketPrice = stockPrice?.price || filing.analysis?.market_price || null
 
-  async function handleAnalyze() {
-    setAnalyzing(true)
-    try {
-      const res = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filing })
-      })
-      const data = await res.json()
-      setFreshAnalysis(data.analysis)
-      setFreshHasDocument(data.hasDocument)
-      if (data.stockPrice) setStockPrice(data.stockPrice)
-    } catch (e) {
-      setFreshAnalysis('Analysis unavailable. Please try again.')
-    } finally {
-      setAnalyzing(false)
-    }
-  }
-
   const badgeClass = isThirdParty
     ? 'bg-purple-50 text-purple-700 border border-purple-200'
     : 'bg-blue-50 text-blue-700 border border-blue-200'
@@ -127,13 +108,6 @@ export function TenderOfferCard({ filing }: { filing: Filing }) {
         </div>
 
         <div className="flex flex-col gap-2 shrink-0">
-          <button
-            onClick={handleAnalyze}
-            disabled={analyzing}
-            className="text-sm px-4 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {analyzing ? 'Analyzing...' : displayAnalysis ? 'Refresh analysis' : 'Analyze opportunity'}
-          </button>
           <a
             href="https://www.sec.gov/cgi-bin/browse-edgar"
             target="_blank"
@@ -160,6 +134,12 @@ export function TenderOfferCard({ filing }: { filing: Filing }) {
           <div className="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
             <ReactMarkdown>{displayAnalysis}</ReactMarkdown>
           </div>
+        </div>
+      )}
+
+      {!displayAnalysis && (
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <p className="text-xs text-gray-400">Analysis will be available shortly.</p>
         </div>
       )}
     </div>
