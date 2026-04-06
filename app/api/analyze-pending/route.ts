@@ -30,7 +30,9 @@ async function fetchFilingDocument(adsh: string, cik: string): Promise<string> {
     const docMatch =
       indexHtml.match(/href="([^"]*\.htm[^"]*)"[^>]*>[^<]*SC TO/i) ||
       indexHtml.match(/href="([^"]*sctoi[^"]*\.htm[^"]*)"/i) ||
-      indexHtml.match(/href="([^"]*scto[^"]*\.htm[^"]*)"/i)
+      indexHtml.match(/href="([^"]*scto[^"]*\.htm[^"]*)"/i) ||
+      indexHtml.match(/href="([^"]*13e[^"]*\.htm[^"]*)"/i) ||
+      indexHtml.match(/href="([^"]*\.htm[^"]*)"/i)
     if (!docMatch) return ''
     const docUrl = docMatch[1].startsWith('http')
       ? docMatch[1]
@@ -50,6 +52,20 @@ async function fetchFilingDocument(adsh: string, cik: string): Promise<string> {
   } catch { return '' }
 }
 
+function getEventContext(form: string, lang: 'en' | 'es'): string {
+  if (lang === 'es') {
+    if (form === 'SC 13E-3') return 'Esta es una transacción de PRIVATIZACIÓN (going-private). Un accionista mayoritario o la dirección ofrece comprar las acciones públicas para retirar la empresa de bolsa. Suele implicar una prima significativa sobre el precio de mercado.'
+    if (form === 'SC 13E-4') return 'Esta es una OFERTA DE RECOMPRA DIRECTA de una empresa pequeña que recompra sus propias acciones directamente de los accionistas a un precio fijo, normalmente por encima del precio de mercado.'
+    if (form === 'SC TO-T') return 'Esta es una OFERTA DE COMPRA DE TERCEROS donde una empresa externa ofrece adquirir acciones de la compañía objetivo, normalmente a un precio premium.'
+    return 'Esta es una OFERTA DE RECOMPRA donde la empresa recompra sus propias acciones directamente de los accionistas a un precio fijo.'
+  } else {
+    if (form === 'SC 13E-3') return 'This is a GOING-PRIVATE transaction. A controlling shareholder or management is offering to buy out public shareholders to delist the company from the stock exchange. These typically involve a significant premium over market price.'
+    if (form === 'SC 13E-4') return 'This is an ISSUER TENDER OFFER by a smaller company repurchasing its own shares directly from shareholders at a fixed price, typically above current market price.'
+    if (form === 'SC TO-T') return 'This is a THIRD-PARTY TENDER OFFER where an external company is offering to acquire shares of the target company, typically at a premium price.'
+    return 'This is an ISSUER TENDER OFFER where the company is repurchasing its own shares directly from shareholders at a fixed price.'
+  }
+}
+
 async function generateAnalysis(
   filing: any,
   documentText: string,
@@ -65,10 +81,14 @@ async function generateAnalysis(
     ? 'Write the entire analysis in Spanish. Use financial terminology appropriate for retail investors in Spain and Latin America. Translate BUY/WATCH/AVOID as COMPRAR/VIGILAR/EVITAR.'
     : 'Write the entire analysis in English.'
 
+  const eventContext = getEventContext(filing.form, lang)
+
   const prompt = hasDocument
     ? `You are a financial analyst for retail investors. ${langInstruction}
 
-Analyze this SEC tender offer:
+Event type context: ${eventContext}
+
+Analyze this SEC filing:
 Company: ${filing.companies.join(' / ')}
 Form: ${filing.form}
 Filed: ${filing.file_date}
@@ -80,7 +100,10 @@ ${documentText}
 Extract: exact offer price, premium over market price, expiration date, total shares/amount, cancellation conditions.
 Give COMPRAR/VIGILAR/EVITAR (or BUY/WATCH/AVOID) recommendation with reasoning.
 Max 250 words. Use clear sections with specific numbers.`
-    : `Analyze this SEC tender offer for retail investors. ${langInstruction}
+    : `Analyze this SEC filing for retail investors. ${langInstruction}
+
+Event type context: ${eventContext}
+
 Company: ${filing.companies.join(' / ')}
 Form: ${filing.form}
 Filed: ${filing.file_date}
@@ -96,6 +119,13 @@ Cover: what this means, opportunity assessment, key risks, what to watch. Max 20
   return message.content[0].type === 'text'
     ? message.content[0].text
     : lang === 'es' ? 'Análisis no disponible' : 'Analysis unavailable'
+}
+
+function getEventType(form: string): string {
+  if (form === 'SC 13E-3') return 'going_private'
+  if (form === 'SC 13E-4') return 'issuer_tender_small'
+  if (form === 'SC TO-T') return 'third_party_tender'
+  return 'tender_offer'
 }
 
 export async function GET(request: Request) {
@@ -171,6 +201,8 @@ export async function GET(request: Request) {
   return NextResponse.json({
     processed: filing.companies[0],
     ticker,
+    form: filing.form,
+    eventType: getEventType(filing.form),
     hasDocument,
     marketPrice: stockPrice?.price,
     pending: pending.length - 1

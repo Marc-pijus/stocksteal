@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 
     // Step 2: Fetch recent filings from EDGAR
     const response = await fetch(
-      `https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T&dateRange=custom&startdt=${startdt}&enddt=${enddt}&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=40`,
+      `https://efts.sec.gov/LATEST/search-index?forms=SC+TO-I,SC+TO-T,SC+13E-4,SC+13E-3&dateRange=custom&startdt=${startdt}&enddt=${enddt}&_source=file_date,display_names,adsh,form,root_forms,biz_locations&from=0&size=40`,
       {
         headers: {
           'User-Agent': 'StockSteal contact@stocksteal.com',
@@ -75,6 +75,8 @@ export async function GET(request: Request) {
         file_date: filing.fileDate,
         companies: filing.companies,
         location: filing.location,
+        event_type: filing.form === 'SC 13E-3' ? 'going_private' : 
+              filing.form === 'SC 13E-4' ? 'issuer_tender_small' : 'tender_offer',
       })
     }
 
