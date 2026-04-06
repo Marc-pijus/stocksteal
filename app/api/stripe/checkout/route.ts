@@ -4,13 +4,13 @@ import { createClient } from '@/lib/supabase-server'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+      return NextResponse.redirect(new URL('/login', process.env.NEXT_PUBLIC_SITE_URL!))
     }
 
     const session = await stripe.checkout.sessions.create({
@@ -29,10 +29,10 @@ export async function POST(request: Request) {
       },
     })
 
-    return NextResponse.json({ url: session.url })
+    return NextResponse.redirect(session.url!, 303)
 
   } catch (error) {
     console.error('Stripe checkout error:', error)
-    return NextResponse.json({ error: 'Failed to create checkout' }, { status: 500 })
+    return NextResponse.redirect(new URL('/dashboard', process.env.NEXT_PUBLIC_SITE_URL!))
   }
 }
