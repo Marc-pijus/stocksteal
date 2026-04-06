@@ -11,6 +11,7 @@ interface Filing {
   companies: string[]
   location: string
   edgarUrl: string
+  event_type?: string
   analysis?: {
     analysis: string
     analysis_es?: string
@@ -44,35 +45,72 @@ function daysAgo(dateStr: string, lang: 'en' | 'es'): string {
   return `${diff} days ago`
 }
 
+function getSignal(text: string): { label: string; color: string } | null {
+  const upper = text.toUpperCase()
+  if (upper.includes('RECOMMENDATION: BUY') || upper.includes('SIGNAL: BUY') || upper.includes('COMPRAR')) {
+    return { label: 'BUY', color: '#16a34a' }
+  }
+  if (upper.includes('RECOMMENDATION: AVOID') || upper.includes('EVITAR')) {
+    return { label: 'AVOID', color: '#dc2626' }
+  }
+  if (upper.includes('RECOMMENDATION: WATCH') || upper.includes('SIGNAL: WATCH') || upper.includes('VIGILAR')) {
+    return { label: 'WATCH', color: '#d97706' }
+  }
+  return null
+}
+
 const labels = {
   en: {
     issuerBuyback: 'Issuer buyback',
     thirdParty: 'Third-party offer',
+    buyback: 'Buyback program',
+    goingPrivate: 'Going private',
     acquirer: 'Acquirer',
     aiAnalysis: 'AI Analysis',
     basedOnDoc: 'Based on filing document',
     generalAnalysis: 'General analysis',
     viewOnEdgar: 'View on EDGAR',
     pending: 'Analysis will be available shortly.',
+    showAnalysis: 'Show analysis ↓',
+    hideAnalysis: 'Hide analysis ↑',
   },
   es: {
     issuerBuyback: 'Recompra del emisor',
     thirdParty: 'Oferta de terceros',
+    buyback: 'Programa de recompra',
+    goingPrivate: 'Privatización',
     acquirer: 'Adquirente',
     aiAnalysis: 'Análisis IA',
     basedOnDoc: 'Basado en el documento SEC',
     generalAnalysis: 'Análisis general',
     viewOnEdgar: 'Ver en EDGAR',
     pending: 'El análisis estará disponible en breve.',
+    showAnalysis: 'Ver análisis ↓',
+    hideAnalysis: 'Ocultar análisis ↑',
   }
 }
 
+function getBadgeLabel(form: string, eventType: string | undefined, lbl: typeof labels['en']): string {
+  if (eventType === 'buyback') return lbl.buyback
+  if (eventType === 'going_private') return lbl.goingPrivate
+  if (form === 'SC TO-T') return lbl.thirdParty
+  return lbl.issuerBuyback
+}
+
+function getBadgeClass(form: string, eventType: string | undefined): string {
+  if (eventType === 'buyback') return 'bg-green-50 text-green-700 border border-green-200'
+  if (eventType === 'going_private') return 'bg-red-50 text-red-700 border border-red-200'
+  if (form === 'SC TO-T') return 'bg-purple-50 text-purple-700 border border-purple-200'
+  return 'bg-blue-50 text-blue-700 border border-blue-200'
+}
+
 export function TenderOfferCard({ filing, lang = 'en' }: { filing: Filing, lang?: 'en' | 'es' }) {
+  const [expanded, setExpanded] = useState(false)
+
   const mainCompany = filing.companies[0]
   const acquirer = filing.companies[1]
   const ticker = extractTicker(mainCompany)
   const name = extractName(mainCompany)
-  const isThirdParty = filing.form === 'SC TO-T'
   const lbl = labels[lang]
 
   const displayAnalysis = lang === 'es'
@@ -81,63 +119,91 @@ export function TenderOfferCard({ filing, lang = 'en' }: { filing: Filing, lang?
 
   const displayHasDocument = filing.analysis?.has_document ?? null
   const displayMarketPrice = filing.analysis?.market_price || null
+  const signal = displayAnalysis ? getSignal(displayAnalysis) : null
 
-  const badgeClass = isThirdParty
-    ? 'bg-purple-50 text-purple-700 border border-purple-200'
-    : 'bg-blue-50 text-blue-700 border border-blue-200'
-
-  const badgeLabel = isThirdParty ? lbl.thirdParty : lbl.issuerBuyback
+  const badgeClass = getBadgeClass(filing.form, filing.event_type)
+  const badgeLabel = getBadgeLabel(filing.form, filing.event_type, lbl)
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap mb-1">
-            {ticker && (
-              <span className="text-xs font-mono font-semibold bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
-                {ticker}
+    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 transition-colors">
+      {/* Card header — always visible */}
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap mb-1">
+              {ticker && (
+                <span className="text-xs font-mono font-semibold bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
+                  {ticker}
+                </span>
+              )}
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badgeClass}`}>
+                {badgeLabel}
               </span>
+              <span className="text-xs text-gray-400">{daysAgo(filing.fileDate, lang)}</span>
+            </div>
+
+            <h3 className="font-medium text-gray-900 truncate">{name}</h3>
+
+            {acquirer && (
+              <p className="text-sm text-gray-500 mt-0.5">
+                {lbl.acquirer}: <span className="text-gray-700">{extractName(acquirer)}</span>
+              </p>
             )}
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badgeClass}`}>
-              {badgeLabel}
-            </span>
-            <span className="text-xs text-gray-400">{daysAgo(filing.fileDate, lang)}</span>
+
+            <p className="text-xs text-gray-400 mt-1">{filing.location} · {filing.form}</p>
           </div>
 
-          <h3 className="font-medium text-gray-900 truncate">{name}</h3>
-
-          {acquirer && (
-            <p className="text-sm text-gray-500 mt-0.5">
-              {lbl.acquirer}: <span className="text-gray-700">{extractName(acquirer)}</span>
-            </p>
-          )}
-
-          <p className="text-xs text-gray-400 mt-1">{filing.location} · {filing.form}</p>
-
-          {displayMarketPrice && (
-            <div className="flex items-center gap-3 mt-2">
+          {/* Right side: price + signal */}
+          <div className="flex flex-col items-end gap-2 shrink-0">
+            {displayMarketPrice && (
               <span className="text-lg font-semibold text-gray-900">
                 ${Number(displayMarketPrice).toFixed(2)}
               </span>
-            </div>
-          )}
+            )}
+            {signal && (
+              <span style={{
+                background: signal.color + '15',
+                color: signal.color,
+                border: `1px solid ${signal.color}40`,
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                padding: '3px 10px',
+                borderRadius: 4,
+              }}>
+                {signal.label}
+              </span>
+            )}
+          </div>
         </div>
 
-        <div className="flex flex-col gap-2 shrink-0">
+        {/* Toggle + EDGAR link */}
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+          {displayAnalysis ? (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors"
+            >
+              {expanded ? lbl.hideAnalysis : lbl.showAnalysis}
+            </button>
+          ) : (
+            <span className="text-xs text-gray-400">{lbl.pending}</span>
+          )}
           <a
             href="https://www.sec.gov/cgi-bin/browse-edgar"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-center text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
           >
             {lbl.viewOnEdgar}
           </a>
         </div>
       </div>
 
-      {displayAnalysis ? (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-2 mb-2">
+      {/* Expandable analysis */}
+      {expanded && displayAnalysis && (
+        <div className="px-5 pb-5 border-t border-gray-100 bg-gray-50">
+          <div className="flex items-center gap-2 pt-4 mb-3">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
               {lbl.aiAnalysis}
             </p>
@@ -150,10 +216,6 @@ export function TenderOfferCard({ filing, lang = 'en' }: { filing: Filing, lang?
           <div className="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
             <ReactMarkdown>{displayAnalysis}</ReactMarkdown>
           </div>
-        </div>
-      ) : (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <p className="text-xs text-gray-400">{lbl.pending}</p>
         </div>
       )}
     </div>
