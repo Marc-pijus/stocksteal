@@ -67,7 +67,8 @@ async function getFilings() {
       fileDate: f.file_date,
       companies: f.companies,
       location: f.location,
-      analysis: f.analyses?.[0] || null,
+      event_type: f.event_type || 'tender_offer',
+  analysis: f.analyses?.[0] || null,
     }))
 }
 
