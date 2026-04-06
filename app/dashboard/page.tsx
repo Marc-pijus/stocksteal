@@ -1,7 +1,7 @@
-import { TenderOfferCard } from '@/components/TenderOfferCard'
 import { supabase } from '@/lib/supabase'
 import { createClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
+import { DashboardClient } from '@/components/DashboardClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,6 +12,7 @@ async function getFilings() {
       *,
       analyses!analyses_filing_id_fkey (
         analysis,
+        analysis_es,
         has_document,
         ticker,
         market_price,
@@ -91,97 +92,11 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
     getSubscriptionStatus(user.id)
   ])
 
-  const visibleFilings = isSubscribed ? filings : filings.slice(0, 1)
-  const lockedFilings = isSubscribed ? [] : filings.slice(1)
-
   return (
-    <main className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div>
-            <a href="/" style={{ textDecoration: 'none' }}>
-              <h1 className="text-xl font-semibold text-gray-900">StockSteal</h1>
-            </a>
-            <p className="text-xs text-gray-500">Real-time tender offer opportunities</p>
-          </div>
-          <div className="flex items-center gap-3">
-            {!isSubscribed && (
-              <SubscribeButton />
-            )}
-            <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full">
-              {filings.length} active filings
-            </span>
-            <LogoutButton />
-          </div>
-        </div>
-      </header>
-
-      {params.success && (
-        <div className="max-w-6xl mx-auto px-6 pt-4">
-          <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-sm text-green-700">
-            Subscription activated successfully. Welcome to StockSteal Pro!
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="mb-6">
-          <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-            Latest Tender Offers — SEC EDGAR
-          </h2>
-        </div>
-        <div className="grid gap-4">
-          {visibleFilings.map((filing: any) => (
-            <TenderOfferCard key={filing.id} filing={filing} />
-          ))}
-
-          {lockedFilings.length > 0 && (
-            <div className="relative">
-              <div style={{ filter: 'blur(4px)', pointerEvents: 'none', userSelect: 'none' }} className="grid gap-4">
-                {lockedFilings.map((filing: any) => (
-                  <div key={filing.id} className="bg-white border border-gray-200 rounded-xl p-5">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-mono font-semibold bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
-                        {filing.companies[0].match(/\(([A-Z]{2,5})\)/)?.[1] || '—'}
-                      </span>
-                      <span className="text-xs text-gray-400">{filing.fileDate}</span>
-                    </div>
-                    <h3 className="font-medium text-gray-900">{filing.companies[0].replace(/\s*\(.*?\)\s*/g, '').trim()}</h3>
-                    <p className="text-xs text-gray-400 mt-1">{filing.location} · {filing.form}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white border border-gray-200 rounded-xl shadow-lg px-8 py-6 text-center max-w-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">Unlock all opportunities</h3>
-                  <p className="text-sm text-gray-500 mb-4">Subscribe to StockSteal Pro for $9/month to access all active tender offer analyses.</p>
-                  <SubscribeButton />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </main>
-  )
-}
-
-function SubscribeButton() {
-  return (
-    <form action="/api/stripe/checkout" method="POST">
-      <button type="submit" className="text-sm px-4 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors">
-        Subscribe $9/month →
-      </button>
-    </form>
-  )
-}
-
-function LogoutButton() {
-  return (
-    <form action="/api/auth/logout" method="POST">
-      <button type="submit" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
-        Sign out
-      </button>
-    </form>
+    <DashboardClient
+      filings={filings}
+      isSubscribed={isSubscribed}
+      showSuccess={!!params.success}
+    />
   )
 }

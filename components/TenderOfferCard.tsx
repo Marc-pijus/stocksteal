@@ -13,18 +13,12 @@ interface Filing {
   edgarUrl: string
   analysis?: {
     analysis: string
+    analysis_es?: string
     has_document: boolean
     ticker: string | null
     market_price: number | null
     updated_at: string
   } | null
-}
-
-interface StockPrice {
-  price: number
-  high: number
-  low: number
-  volume: number
 }
 
 function extractTicker(company: string): string | null {
@@ -36,36 +30,63 @@ function extractName(company: string): string {
   return company.replace(/\s*\(.*?\)\s*/g, '').trim()
 }
 
-function daysAgo(dateStr: string): string {
+function daysAgo(dateStr: string, lang: 'en' | 'es'): string {
   const date = new Date(dateStr)
   const now = new Date()
   const diff = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+  if (lang === 'es') {
+    if (diff === 0) return 'Hoy'
+    if (diff === 1) return 'Ayer'
+    return `hace ${diff} días`
+  }
   if (diff === 0) return 'Today'
   if (diff === 1) return 'Yesterday'
   return `${diff} days ago`
 }
 
-export function TenderOfferCard({ filing }: { filing: Filing }) {
-  const [analyzing, setAnalyzing] = useState(false)
-  const [freshAnalysis, setFreshAnalysis] = useState<string | null>(null)
-  const [freshHasDocument, setFreshHasDocument] = useState<boolean | null>(null)
-  const [stockPrice, setStockPrice] = useState<StockPrice | null>(null)
+const labels = {
+  en: {
+    issuerBuyback: 'Issuer buyback',
+    thirdParty: 'Third-party offer',
+    acquirer: 'Acquirer',
+    aiAnalysis: 'AI Analysis',
+    basedOnDoc: 'Based on filing document',
+    generalAnalysis: 'General analysis',
+    viewOnEdgar: 'View on EDGAR',
+    pending: 'Analysis will be available shortly.',
+  },
+  es: {
+    issuerBuyback: 'Recompra del emisor',
+    thirdParty: 'Oferta de terceros',
+    acquirer: 'Adquirente',
+    aiAnalysis: 'Análisis IA',
+    basedOnDoc: 'Basado en el documento SEC',
+    generalAnalysis: 'Análisis general',
+    viewOnEdgar: 'Ver en EDGAR',
+    pending: 'El análisis estará disponible en breve.',
+  }
+}
 
+export function TenderOfferCard({ filing, lang = 'en' }: { filing: Filing, lang?: 'en' | 'es' }) {
   const mainCompany = filing.companies[0]
   const acquirer = filing.companies[1]
   const ticker = extractTicker(mainCompany)
   const name = extractName(mainCompany)
   const isThirdParty = filing.form === 'SC TO-T'
+  const lbl = labels[lang]
 
-  const displayAnalysis = freshAnalysis || filing.analysis?.analysis || null
-  const displayHasDocument = freshHasDocument ?? filing.analysis?.has_document ?? null
-  const displayMarketPrice = stockPrice?.price || filing.analysis?.market_price || null
+  const displayAnalysis = lang === 'es'
+    ? (filing.analysis?.analysis_es || filing.analysis?.analysis || null)
+    : (filing.analysis?.analysis || null)
+
+  const displayHasDocument = filing.analysis?.has_document ?? null
+  const displayMarketPrice = filing.analysis?.market_price || null
 
   const badgeClass = isThirdParty
     ? 'bg-purple-50 text-purple-700 border border-purple-200'
     : 'bg-blue-50 text-blue-700 border border-blue-200'
 
-  const badgeLabel = isThirdParty ? 'Third-party offer' : 'Issuer buyback'
+  const badgeLabel = isThirdParty ? lbl.thirdParty : lbl.issuerBuyback
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors">
@@ -80,14 +101,14 @@ export function TenderOfferCard({ filing }: { filing: Filing }) {
             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badgeClass}`}>
               {badgeLabel}
             </span>
-            <span className="text-xs text-gray-400">{daysAgo(filing.fileDate)}</span>
+            <span className="text-xs text-gray-400">{daysAgo(filing.fileDate, lang)}</span>
           </div>
 
           <h3 className="font-medium text-gray-900 truncate">{name}</h3>
 
           {acquirer && (
             <p className="text-sm text-gray-500 mt-0.5">
-              Acquirer: <span className="text-gray-700">{extractName(acquirer)}</span>
+              {lbl.acquirer}: <span className="text-gray-700">{extractName(acquirer)}</span>
             </p>
           )}
 
@@ -98,11 +119,6 @@ export function TenderOfferCard({ filing }: { filing: Filing }) {
               <span className="text-lg font-semibold text-gray-900">
                 ${Number(displayMarketPrice).toFixed(2)}
               </span>
-              {stockPrice && (
-                <span className="text-xs text-gray-400">
-                  H: ${stockPrice.high?.toFixed(2)} · L: ${stockPrice.low?.toFixed(2)} · Vol: {stockPrice.volume?.toLocaleString()}
-                </span>
-              )}
             </div>
           )}
         </div>
@@ -114,20 +130,20 @@ export function TenderOfferCard({ filing }: { filing: Filing }) {
             rel="noopener noreferrer"
             className="text-xs text-center text-gray-400 hover:text-gray-600 transition-colors"
           >
-            View on EDGAR
+            {lbl.viewOnEdgar}
           </a>
         </div>
       </div>
 
-      {displayAnalysis && (
+      {displayAnalysis ? (
         <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2 mb-2">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-              AI Analysis
+              {lbl.aiAnalysis}
             </p>
             {displayHasDocument !== null && (
               <span className={`text-xs px-2 py-0.5 rounded-full ${displayHasDocument ? 'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700'}`}>
-                {displayHasDocument ? 'Based on filing document' : 'General analysis'}
+                {displayHasDocument ? lbl.basedOnDoc : lbl.generalAnalysis}
               </span>
             )}
           </div>
@@ -135,11 +151,9 @@ export function TenderOfferCard({ filing }: { filing: Filing }) {
             <ReactMarkdown>{displayAnalysis}</ReactMarkdown>
           </div>
         </div>
-      )}
-
-      {!displayAnalysis && (
+      ) : (
         <div className="mt-4 pt-4 border-t border-gray-100">
-          <p className="text-xs text-gray-400">Analysis will be available shortly.</p>
+          <p className="text-xs text-gray-400">{lbl.pending}</p>
         </div>
       )}
     </div>
