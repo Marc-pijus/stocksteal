@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { supabaseAdmin } from '@/lib/supabase'
+import { sendWelcomeEmail } from '@/lib/email'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -31,6 +32,10 @@ export async function POST(request: Request) {
         status: 'active',
       }, { onConflict: 'id' })
     }
+if (session.customer_email) {
+  await sendWelcomeEmail(session.customer_email)
+}
+
   }
 
   if (

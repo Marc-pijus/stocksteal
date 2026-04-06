@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { supabaseAdmin } from '@/lib/supabase'
+import { sendAlertEmail } from '@/lib/email'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -127,6 +128,26 @@ Cover: what this means, opportunity assessment, key risks, what to watch. Max 20
     market_price: stockPrice?.price || null,
     updated_at: new Date().toISOString()
   }, { onConflict: 'filing_id' })
+
+  const { data: subscribers } = await supabaseAdmin
+  .from('subscribers')
+  .select('email')
+  .eq('status', 'active')
+
+if (subscribers && subscribers.length > 0) {
+  const emails = subscribers.map((s: any) => s.email).filter(Boolean)
+  if (emails.length > 0) {
+    await sendAlertEmail({
+      to: emails,
+      ticker,
+      company: filing.companies[0].replace(/\s*\(.*?\)\s*/g, '').trim(),
+      form: filing.form,
+      marketPrice: stockPrice?.price || null,
+      analysis,
+      hasDocument,
+    })
+  }
+}
 
   return NextResponse.json({
     processed: filing.companies[0],
