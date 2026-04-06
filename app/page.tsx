@@ -369,7 +369,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <a href="/subscribe" className="btn-primary" style={{ marginTop: 28, display: 'block', textAlign: 'center', background: '#fff', color: '#1a1a16' }}>{t.planBtn}</a>
+              <a href="/login" className="btn-primary" style={{ marginTop: 28, display: 'block', textAlign: 'center', background: '#fff', color: '#1a1a16' }}>{t.planBtn}</a>
             </div>
           </div>
         </div>
