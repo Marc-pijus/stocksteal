@@ -50,6 +50,54 @@ async function fetchFilingDocument(adsh: string, cik: string): Promise<string> {
   } catch { return '' }
 }
 
+async function generateAnalysis(
+  filing: any,
+  documentText: string,
+  stockPrice: any,
+  lang: 'en' | 'es'
+): Promise<string> {
+  const hasDocument = documentText.length > 100
+  const priceContext = stockPrice
+    ? `Current market data: Close $${stockPrice.price?.toFixed(2)}, High $${stockPrice.high?.toFixed(2)}, Low $${stockPrice.low?.toFixed(2)}`
+    : `Market price not available.`
+
+  const langInstruction = lang === 'es'
+    ? 'Write the entire analysis in Spanish. Use financial terminology appropriate for retail investors in Spain and Latin America. Translate BUY/WATCH/AVOID as COMPRAR/VIGILAR/EVITAR.'
+    : 'Write the entire analysis in English.'
+
+  const prompt = hasDocument
+    ? `You are a financial analyst for retail investors. ${langInstruction}
+
+Analyze this SEC tender offer:
+Company: ${filing.companies.join(' / ')}
+Form: ${filing.form}
+Filed: ${filing.file_date}
+${priceContext}
+
+FILING DOCUMENT:
+${documentText}
+
+Extract: exact offer price, premium over market price, expiration date, total shares/amount, cancellation conditions.
+Give COMPRAR/VIGILAR/EVITAR (or BUY/WATCH/AVOID) recommendation with reasoning.
+Max 250 words. Use clear sections with specific numbers.`
+    : `Analyze this SEC tender offer for retail investors. ${langInstruction}
+Company: ${filing.companies.join(' / ')}
+Form: ${filing.form}
+Filed: ${filing.file_date}
+${priceContext}
+Cover: what this means, opportunity assessment, key risks, what to watch. Max 200 words.`
+
+  const message = await client.messages.create({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 500,
+    messages: [{ role: 'user', content: prompt }]
+  })
+
+  return message.content[0].type === 'text'
+    ? message.content[0].text
+    : lang === 'es' ? 'Análisis no disponible' : 'Analysis unavailable'
+}
+
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -84,45 +132,16 @@ export async function GET(request: Request) {
   ])
 
   const hasDocument = documentText.length > 100
-  const priceContext = stockPrice
-    ? `Current market data: Close $${stockPrice.price?.toFixed(2)}, High $${stockPrice.high?.toFixed(2)}, Low $${stockPrice.low?.toFixed(2)}`
-    : `Market price not available for ${ticker}.`
 
-  const prompt = hasDocument
-    ? `You are a financial analyst for retail investors.
-
-Analyze this SEC tender offer:
-Company: ${filing.companies.join(' / ')}
-Form: ${filing.form}
-Filed: ${filing.file_date}
-${priceContext}
-
-FILING DOCUMENT:
-${documentText}
-
-Extract: exact offer price, premium over market price, expiration date, total shares/amount, cancellation conditions.
-Give BUY/WATCH/AVOID recommendation with reasoning.
-Max 250 words. Use clear sections with specific numbers.`
-    : `Analyze this SEC tender offer for retail investors:
-Company: ${filing.companies.join(' / ')}
-Form: ${filing.form}
-Filed: ${filing.file_date}
-${priceContext}
-Cover: what this means, opportunity assessment, key risks, what to watch. Max 200 words.`
-
-  const message = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 500,
-    messages: [{ role: 'user', content: prompt }]
-  })
-
-  const analysis = message.content[0].type === 'text'
-    ? message.content[0].text
-    : 'Analysis unavailable'
+  const [analysis, analysisEs] = await Promise.all([
+    generateAnalysis(filing, documentText, stockPrice, 'en'),
+    generateAnalysis(filing, documentText, stockPrice, 'es'),
+  ])
 
   await supabaseAdmin.from('analyses').upsert({
     filing_id: filing.id,
     analysis,
+    analysis_es: analysisEs,
     has_document: hasDocument,
     ticker,
     market_price: stockPrice?.price || null,
@@ -130,24 +149,24 @@ Cover: what this means, opportunity assessment, key risks, what to watch. Max 20
   }, { onConflict: 'filing_id' })
 
   const { data: subscribers } = await supabaseAdmin
-  .from('subscribers')
-  .select('email')
-  .eq('status', 'active')
+    .from('subscribers')
+    .select('email')
+    .eq('status', 'active')
 
-if (subscribers && subscribers.length > 0) {
-  const emails = subscribers.map((s: any) => s.email).filter(Boolean)
-  if (emails.length > 0) {
-    await sendAlertEmail({
-      to: emails,
-      ticker,
-      company: filing.companies[0].replace(/\s*\(.*?\)\s*/g, '').trim(),
-      form: filing.form,
-      marketPrice: stockPrice?.price || null,
-      analysis,
-      hasDocument,
-    })
+  if (subscribers && subscribers.length > 0) {
+    const emails = subscribers.map((s: any) => s.email).filter(Boolean)
+    if (emails.length > 0) {
+      await sendAlertEmail({
+        to: emails,
+        ticker,
+        company: filing.companies[0].replace(/\s*\(.*?\)\s*/g, '').trim(),
+        form: filing.form,
+        marketPrice: stockPrice?.price || null,
+        analysis,
+        hasDocument,
+      })
+    }
   }
-}
 
   return NextResponse.json({
     processed: filing.companies[0],
