@@ -1,0 +1,28 @@
+name: Daily Poll
+
+on:
+  schedule:
+    - cron: '0 14 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poll EDGAR for new filings
+        run: |
+          curl -s -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://www.stocksteal.com/api/poll
+
+      - name: Analyze pending filings
+        run: |
+          for i in {1..10}; do
+            RESULT=$(curl -s -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+              https://www.stocksteal.com/api/analyze-pending)
+            echo "Run $i: $RESULT"
+            if echo "$RESULT" | grep -q "No pending"; then
+              echo "All filings analyzed"
+              break
+            fi
+            sleep 8
+          done
